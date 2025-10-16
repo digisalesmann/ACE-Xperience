@@ -65,7 +65,7 @@ const useDarkMode = () => {
 const navLinks = [
     { title: 'Recipes', path: '/recipes' },
     { title: 'Baking & Sweets', path: '/baking' },
-    { title: 'Quick Meals', path: '/recipes?filter=quick' },
+    { title: 'Quick Meals', path: '/meal' },
     { title: 'Tips & Techniques', path: '/tips' },
     { title: 'About Wendy', path: '/about' },
 ];
