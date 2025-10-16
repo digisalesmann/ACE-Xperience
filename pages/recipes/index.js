@@ -10,7 +10,7 @@ import Link from '../../components/Link.js'
 import RecipeCard from '../../components/Cards/RecipeCard.js' 
 // --- Data Imports ---
 // NOTE: Assuming your data is correctly exported from this path
-import { allRecipes, categories, difficulties, ICON_MAP } from './data' 
+import { allRecipes, categories, difficulties, ICON_MAP } from '../../data/recipesData'
 
 // Utility function to get the correct icon component from the map
 const getIcon = (iconKey) => ICON_MAP[iconKey] || Menu;
