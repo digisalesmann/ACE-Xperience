@@ -9,7 +9,7 @@ import Link from '../Link.js'
 const RecipeCard = ({ recipe, index, className }) => {
     
     // 🛠️ FIX 1: Construct the correct image path from the public folder
-    // Assumes images are in /public/images/
+    // This is required to access files in /public/images/
     const imagePath = `/images/${recipe.image}`
 
     // Determine the difficulty styling
@@ -34,7 +34,7 @@ const RecipeCard = ({ recipe, index, className }) => {
                 {/* Main Card Div: Use h-full and flex flex-col to enable equal height + sticky footer */}
                 <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform group-hover:scale-[1.02] border-4 border-transparent group-hover:border-amber-500 h-full flex flex-col">
                     
-                    {/* 🛠️ FIX 2: Use an <img> tag for the recipe image */}
+                    {/* 🛠️ FIX 2: Use an <img> tag for the recipe image and correct path */}
                     <div className="relative h-48 w-full flex-shrink-0">
                         <img 
                             src={imagePath} 
