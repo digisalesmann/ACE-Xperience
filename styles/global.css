@@ -1,0 +1,56 @@
+/* styles/global.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Base Styles */
+body {
+  /* Default Light Mode Base */
+  color: #333333; 
+  line-height: 1.6;
+  font-family: 'Arial', sans-serif; 
+  background-color: #ffffff; /* Default background */
+}
+
+/* Custom class for serif titles */
+.serif-font {
+  font-family: 'Georgia', serif; 
+}
+
+/* Dark Mode Global Overrides */
+.dark body {
+  color: #e5e5e5; /* Light gray text for readability */
+  background-color: #0d0d0d; /* Very dark background */
+}
+
+/* Ensure default links/buttons also transition nicely in dark mode */
+.dark a, .dark button {
+  transition: color 0.3s, background-color 0.3s;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* CRITICAL: Prevents horizontal scroll caused by children overflowing */
+  overflow-x: hidden; 
+}
+
+/* Globally apply this to prevent margin/padding issues */
+* {
+  box-sizing: border-box;
+}
+
+/* Make sure images or other fixed-width elements don't overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- Utility for Hiding Scrollbars (Used on Filter Tabs) --- */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}

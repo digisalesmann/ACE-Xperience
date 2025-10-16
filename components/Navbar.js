@@ -1,0 +1,229 @@
+// components/Navbar.js
+
+'use client'
+import React, { useState, useEffect, useCallback } from 'react';
+import Link from './Link'; 
+
+// --- Icon & Motion Fallbacks (Internalized for single file use) ---
+let motion = { div: (props) => <div {...props} /> }
+let AnimatePresence = ({ children }) => <>{children}</>
+try {
+    const fm = require('framer-motion')
+    motion = fm.motion
+    AnimatePresence = fm.AnimatePresence
+} catch (err) { /* no-op */ }
+
+let Menu, X, Search, Sun, Moon
+try {
+    const lucide = require('lucide-react')
+    Menu = lucide.Menu
+    X = lucide.X
+    Search = lucide.Search
+    Sun = lucide.Sun
+    Moon = lucide.Moon
+} catch (err) {
+    Menu = () => <span aria-hidden="true" className="w-6 h-6">☰</span>
+    X = () => <span aria-hidden="true" className="w-6 h-6">✕</span>
+    Search = () => <span aria-hidden="true" className="w-5 h-5">🔍</span>
+    Sun = (props) => <span role="img" aria-label="Sun icon" className="w-5 h-5" {...props}>☀️</span>
+    Moon = (props) => <span role="img" aria-label="Moon icon" className="w-5 h-5" {...props}>🌙</span>
+}
+
+// --- Custom Dark Mode Hook (Internalized) ---
+const useDarkMode = () => {
+    const [darkMode, setDarkMode] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const storedTheme = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
+        const prefersDark = typeof window !== 'undefined' ? window.matchMedia('(prefers-color-scheme: dark)').matches : false;
+        
+        const initialDark = (storedTheme === 'dark') || (!storedTheme && prefersDark);
+
+        setDarkMode(initialDark);
+        if (typeof document !== 'undefined') {
+            document.documentElement.classList[initialDark ? 'add' : 'remove']('dark');
+        }
+    }, []); 
+
+    const toggleTheme = useCallback(() => {
+        setDarkMode(prev => {
+            const newDarkMode = !prev;
+            
+            if (typeof document !== 'undefined') {
+                document.documentElement.classList[newDarkMode ? 'add' : 'remove']('dark');
+                localStorage.setItem('theme', newDarkMode ? 'dark' : 'light');
+            }
+            return newDarkMode;
+        });
+    }, []);
+
+    return { darkMode, mounted, toggleTheme };
+};
+
+const navLinks = [
+    { title: 'Recipes', path: '/recipes' },
+    { title: 'Baking & Sweets', path: '/baking' },
+    { title: 'Quick Meals', path: '/recipes?filter=quick' },
+    { title: 'Tips & Techniques', path: '/tips' },
+    { title: 'About Wendy', path: '/about' },
+];
+
+export default function Navbar() {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const { darkMode, mounted, toggleTheme } = useDarkMode(); 
+
+    // ENHANCEMENT: Memoized toggle function for better performance and scroll lock
+    const toggleMenu = useCallback(() => {
+        setMenuOpen((prev) => {
+            const newState = !prev;
+            if (typeof document !== 'undefined') {
+                document.body.style.overflow = newState ? 'hidden' : 'unset';
+            }
+            return newState;
+        });
+    }, []);
+    
+    // Placeholder during hydration
+    if (!mounted) {
+        return (
+            <nav 
+                className="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-white/70 
+                dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800
+                transition-all duration-300 shadow-sm h-20"
+            >
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+                    <h1 className="text-3xl font-extrabold font-serif tracking-tight text-gray-900 dark:text-white">
+                        AceX
+                    </h1>
+                </div>
+            </nav>
+        );
+    }
+
+    return (
+        <nav
+            aria-label="Main Navigation"
+            className="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-white/70 
+            dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800
+            transition-all duration-300 shadow-sm"
+        >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4 h-20">
+
+                <Link href="/" className="group" aria-label="AceX Home">
+                    <h1 className="text-4xl font-serif tracking-tight transition-colors">
+                        <span className="font-extrabold text-gray-900 dark:text-gray-100 italic transition-colors group-hover:text-amber-600">
+                            Ace
+                        </span>
+                        <span className="font-semibold text-amber-500 dark:text-amber-400">
+                            X
+                        </span>
+                    </h1>
+                </Link>
+
+                {/* Desktop Nav */}
+                <ul className="hidden md:flex items-center space-x-8" role="menubar">
+                    {navLinks.map((link) => (
+                        <li key={link.title} role="none">
+                            <Link
+                                href={link.path}
+                                role="menuitem"
+                                className="relative text-gray-700 dark:text-gray-200 font-medium 
+                                hover:text-amber-500 transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-sm p-1 -m-1" // Added a small margin/padding for focus ring
+                            >
+                                {link.title}
+                                <span className="absolute bottom-[-5px] left-0 w-full h-[2px] bg-amber-500 
+                                transform scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100 transition-transform duration-300 origin-left"></span>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+
+                <div className="flex items-center space-x-4">
+                    {/* Search Button (Desktop) */}
+                    <button
+                        aria-label="Search site"
+                        className="hidden md:block text-gray-600 dark:text-gray-300 hover:text-amber-500 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-full p-2"
+                    >
+                        <Search className="w-5 h-5" />
+                    </button>
+                    
+                    {/* Dark Mode Toggle */}
+                    <button
+                        onClick={toggleTheme}
+                        className="text-gray-700 dark:text-gray-200 hover:text-amber-500 transition p-2 rounded-full border border-transparent hover:border-amber-500/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                        aria-label={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
+                    >
+                        <AnimatePresence mode="wait" initial={false}>
+                            {darkMode ? (
+                                <motion.div key="sun" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                                    <Sun size={20} />
+                                </motion.div>
+                            ) : (
+                                <motion.div key="moon" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                                    <Moon size={20} />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </button>
+                    
+                    {/* Mobile Menu Toggle */}
+                    <button
+                        className="md:hidden text-gray-700 dark:text-gray-200 hover:text-amber-500 transition p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-full"
+                        onClick={toggleMenu}
+                        aria-label={menuOpen ? "Close menu" : "Open menu"}
+                        aria-expanded={menuOpen}
+                    >
+                        {menuOpen ? <X size={26} /> : <Menu size={26} />}
+                    </button>
+                </div>
+            </div>
+
+            {/* Mobile Menu Panel */}
+            <AnimatePresence>
+                {menuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -15 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                        className="md:hidden absolute w-full bg-white dark:bg-gray-950 border-t border-gray-200 
+                        dark:border-gray-800 shadow-xl rounded-b-xl overflow-y-auto max-h-[80vh]"
+                        role="dialog"
+                        aria-modal="true"
+                    >
+                        <ul className="flex flex-col p-4 space-y-2" role="menu">
+                            {navLinks.map((link) => (
+                                <li key={link.title} role="none">
+                                    <Link
+                                        href={link.path}
+                                        role="menuitem"
+                                        className="block p-3 rounded-lg text-lg font-medium 
+                                        text-gray-800 dark:text-gray-100 hover:bg-amber-50 dark:hover:bg-gray-800 
+                                        transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                                        onClick={toggleMenu}
+                                    >
+                                        {link.title}
+                                    </Link>
+                                </li>
+                            ))}
+
+                            {/* Theme Toggle in Mobile Menu */}
+                            <li className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-3 mt-2" role="none">
+                                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">Toggle Theme</span>
+                                <button 
+                                    onClick={toggleTheme} 
+                                    className="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                                    aria-label="Toggle dark mode"
+                                >
+                                    {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                                </button>
+                            </li>
+                        </ul>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </nav>
+    );
+}
