@@ -1,8 +1,11 @@
-// components/Navbar.js
-
 'use client'
 import React, { useState, useEffect, useCallback } from 'react';
-import Link from './Link'; 
+
+// NOTE: Assuming Link is globally available or imported from the environment
+// Since the environment treats this as a single file, I'll inline the Link structure for functionality.
+const Link = ({ href, children, className, onClick, ...props }) => (
+    <a href={href} className={className} onClick={onClick} {...props}>{children}</a>
+);
 
 // --- Icon & Motion Fallbacks (Internalized for single file use) ---
 let motion = { div: (props) => <div {...props} /> }
@@ -13,7 +16,7 @@ try {
     AnimatePresence = fm.AnimatePresence
 } catch (err) { /* no-op */ }
 
-let Menu, X, Search, Sun, Moon
+let Menu, X, Search, Sun, Moon, ShoppingCart, Euro, ArrowRight // FIX: Added ArrowRight
 try {
     const lucide = require('lucide-react')
     Menu = lucide.Menu
@@ -21,13 +24,20 @@ try {
     Search = lucide.Search
     Sun = lucide.Sun
     Moon = lucide.Moon
+    ShoppingCart = lucide.ShoppingCart 
+    Euro = lucide.Euro
+    ArrowRight = lucide.ArrowRight // FIX: Added ArrowRight
 } catch (err) {
     Menu = () => <span aria-hidden="true" className="w-6 h-6">☰</span>
     X = () => <span aria-hidden="true" className="w-6 h-6">✕</span>
     Search = () => <span aria-hidden="true" className="w-5 h-5">🔍</span>
     Sun = (props) => <span role="img" aria-label="Sun icon" className="w-5 h-5" {...props}>☀️</span>
     Moon = (props) => <span role="img" aria-label="Moon icon" className="w-5 h-5" {...props}>🌙</span>
+    ShoppingCart = () => <span aria-hidden="true" className="w-5 h-5">🛒</span> // FIX: Added ShoppingCart Fallback
+    Euro = () => <span aria-hidden="true" className="w-4 h-4">€</span>           // FIX: Added Euro Fallback
+    ArrowRight = () => <span aria-hidden="true" className="w-5 h-5">→</span>
 }
+
 
 // --- Custom Dark Mode Hook (Internalized) ---
 const useDarkMode = () => {
@@ -62,6 +72,48 @@ const useDarkMode = () => {
     return { darkMode, mounted, toggleTheme };
 };
 
+// --- Cart Persistence Hook ---
+const useCartCount = () => {
+    const [count, setCount] = useState(0);
+
+    const updateCartCount = useCallback(() => {
+        try {
+            const storedCart = localStorage.getItem('checkoutCart');
+            if (storedCart) {
+                const cartArray = JSON.parse(storedCart);
+                if (Array.isArray(cartArray)) {
+                    // Calculate total quantity of items
+                    const total = cartArray.reduce((sum, item) => sum + (item.quantity || 0), 0);
+                    setCount(total);
+                }
+            } else {
+                setCount(0);
+            }
+        } catch (e) {
+            console.error("Failed to parse cart data from localStorage:", e);
+            setCount(0); // Reset on parse error
+        }
+    }, []);
+
+    useEffect(() => {
+        // Initial load
+        updateCartCount();
+
+        // Listen for storage events (e.g., cart updated by another page/tab)
+        window.addEventListener('storage', updateCartCount);
+        // Fallback: Check the cart periodically (e.g., when the tab gets focus)
+        window.addEventListener('focus', updateCartCount); 
+
+        return () => {
+            window.removeEventListener('storage', updateCartCount);
+            window.removeEventListener('focus', updateCartCount);
+        };
+    }, [updateCartCount]);
+
+    return count;
+};
+
+// --- NAV LINKS ---
 const navLinks = [
     { title: 'Recipes', path: '/recipes' },
     { title: 'Baking & Sweets', path: '/baking' },
@@ -70,16 +122,42 @@ const navLinks = [
     { title: 'About Wendy', path: '/about' },
 ];
 
+// --- CHECKOUT LINK COMPONENT (Cart Icon) ---
+const CheckoutLink = ({ cartCount, onClick }) => {
+    return (
+        <Link 
+            href="/checkout" 
+            className="relative text-gray-700 dark:text-gray-200 hover:text-amber-500 transition 
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-full p-2"
+            onClick={onClick}
+            aria-label={`View Cart (${cartCount} items)`}
+        >
+            <ShoppingCart size={24} />
+            
+            {cartCount > 0 && (
+                <span className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 
+                                 text-xs font-bold w-5 h-5 bg-red-600 text-white rounded-full 
+                                 flex items-center justify-center border-2 border-white dark:border-gray-900">
+                    {cartCount > 99 ? '99+' : cartCount}
+                </span>
+            )}
+        </Link>
+    );
+};
+
+// --- NAVBAR MAIN COMPONENT ---
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const { darkMode, mounted, toggleTheme } = useDarkMode(); 
+    const cartCount = useCartCount(); // Get persistent cart count
 
     // ENHANCEMENT: Memoized toggle function for better performance and scroll lock
     const toggleMenu = useCallback(() => {
         setMenuOpen((prev) => {
             const newState = !prev;
             if (typeof document !== 'undefined') {
-                document.body.style.overflow = newState ? 'hidden' : 'unset';
+                // Ensure scroll lock/unlock happens smoothly
+                document.body.style.overflow = newState ? 'hidden' : 'unset'; 
             }
             return newState;
         });
@@ -130,7 +208,7 @@ export default function Navbar() {
                                 href={link.path}
                                 role="menuitem"
                                 className="relative text-gray-700 dark:text-gray-200 font-medium 
-                                hover:text-amber-500 transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-sm p-1 -m-1" // Added a small margin/padding for focus ring
+                                hover:text-amber-500 transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-sm p-1 -m-1"
                             >
                                 {link.title}
                                 <span className="absolute bottom-[-5px] left-0 w-full h-[2px] bg-amber-500 
@@ -138,9 +216,11 @@ export default function Navbar() {
                             </Link>
                         </li>
                     ))}
+                    
+                    {/* NEW: Desktop Checkout Icon */}
                 </ul>
 
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4"> {/* FIX: Removed unnecessary space-x-2 sm:space-x-4 mix */}
                     {/* Search Button (Desktop) */}
                     <button
                         aria-label="Search site"
@@ -149,6 +229,9 @@ export default function Navbar() {
                         <Search className="w-5 h-5" />
                     </button>
                     
+                    {/* NEW: Universal Cart/Checkout Link (Visible on all screens) */}
+                    <CheckoutLink cartCount={cartCount} />
+
                     {/* Dark Mode Toggle */}
                     <button
                         onClick={toggleTheme}
@@ -208,6 +291,21 @@ export default function Navbar() {
                                     </Link>
                                 </li>
                             ))}
+                            
+                            {/* NEW: Mobile Menu Checkout Link is now a full text link for clarity, separate from the main icon */}
+                            <li className="pt-3 border-t border-gray-200 dark:border-gray-800 mt-2" role="none">
+                                <Link
+                                    href="/StandaloneCheckout.jsx"
+                                    role="menuitem"
+                                    className="p-3 rounded-lg text-lg font-medium 
+                                    bg-amber-100 text-amber-800 dark:bg-gray-800 dark:text-amber-400 
+                                    hover:bg-amber-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 flex items-center justify-between"
+                                    onClick={toggleMenu}
+                                >
+                                    <span>View Cart ({cartCount})</span>
+                                    <ArrowRight size={20} />
+                                </Link>
+                            </li>
 
                             {/* Theme Toggle in Mobile Menu */}
                             <li className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-3 mt-2" role="none">

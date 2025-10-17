@@ -160,7 +160,9 @@ const ProductCard = ({ item, addToCart }) => {
 
 // --- UTILITY COMPONENT: CART SIDEBAR ---
 
-const CartSidebar = ({ isVisible, cart, setCart, handleCheckout, isCheckingOut, setIsCartOpen }) => {
+// --- UTILITY COMPONENT: CART SIDEBAR ---
+
+const CartSidebar = ({ isVisible, cart, setCart, setIsCartOpen }) => { 
     const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
     const subtotal = Object.values(cart).reduce((sum, item) => sum + item.quantity * item.price, 0);
 
@@ -185,6 +187,27 @@ const CartSidebar = ({ isVisible, cart, setCart, handleCheckout, isCheckingOut, 
             return newCart;
         });
     };
+
+    // --- CORRECTION: Defining the handler locally within the component ---
+    const handleLocalCheckout = () => {
+        if (totalItems === 0) return;
+
+        // 1. Convert cart object to a serializable array format
+        const cartArray = Object.entries(cart).map(([id, item]) => ({
+            id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+        }));
+
+        // 2. Save the data to local storage (the checkout page looks for this key)
+        localStorage.setItem('checkoutCart', JSON.stringify(cartArray));
+
+        // 3. Redirect the user to the standalone checkout page
+        window.location.href = '/checkout';
+    };
+    // --- END CORRECTION ---
+
 
     const cartIsEmpty = totalItems === 0;
 
@@ -264,29 +287,24 @@ const CartSidebar = ({ isVisible, cart, setCart, handleCheckout, isCheckingOut, 
                             )}
                         </div>
 
-                        {/* Footer / Checkout */}
+                        {/* Footer / Checkout Button to Redirect */}
                         <div className="p-6 border-t border-gray-200 dark:border-slate-700 sticky bottom-0 bg-white dark:bg-slate-900">
                             <div className="flex justify-between text-2xl font-serif font-extrabold mb-5 text-slate-800 dark:text-white">
-                                <span>Order Total:</span>
+                                <span>Subtotal:</span>
                                 <span className="flex items-center"><Euro className="w-6 h-6 mr-1" />{subtotal.toFixed(2)}</span>
                             </div>
                             <motion.button
-                                onClick={handleCheckout}
-                                disabled={cartIsEmpty || isCheckingOut}
+                                onClick={handleLocalCheckout}
+                                disabled={cartIsEmpty}
                                 className={`w-full py-4 text-xl font-bold rounded-xl flex items-center justify-center transition duration-300 shadow-xl
-                                    ${cartIsEmpty || isCheckingOut 
+                                    ${cartIsEmpty 
                                         ? 'bg-gray-300 text-gray-600 cursor-not-allowed' 
                                         : 'bg-slate-800 text-amber-200 hover:bg-slate-900 focus:ring-4 focus:ring-amber-500/50'
                                     }`}
-                                whileHover={!cartIsEmpty && !isCheckingOut ? { scale: 1.01 } : {}}
-                                whileTap={!cartIsEmpty && !isCheckingOut ? { scale: 0.98 } : {}}
+                                whileHover={!cartIsEmpty ? { scale: 1.01 } : {}}
+                                whileTap={!cartIsEmpty ? { scale: 0.98 } : {}}
                             >
-                                {isCheckingOut ? (
-                                    <Loader2 className="w-6 h-6 mr-3 animate-spin" />
-                                ) : (
-                                    <Send className="w-6 h-6 mr-3" />
-                                )}
-                                {isCheckingOut ? 'Finalizing Order...' : 'Request Order'}
+                                <Send className="w-6 h-6 mr-3" /> Proceed to Checkout
                             </motion.button>
                         </div>
                     </motion.div>
@@ -440,47 +458,24 @@ const App = () => {
     }, []);
     
     // 3. Checkout Handler (Save order to Firestore)
-    const handleCheckout = async () => {
-        if (totalItems === 0 || !userId || !dbInstance || isCheckingOut) return;
+    // This function replaces the Firestore submission logic
+    const handleLocalCheckout = () => {
+        if (totalItems === 0) return;
 
-        setIsCheckingOut(true);
-        setStatusMessage('');
-
-        const orderDetails = Object.entries(cart).map(([id, item]) => ({
-            itemId: id,
+        // 1. Convert cart object to a serializable array format for local storage
+        const cartArray = Object.entries(cart).map(([id, item]) => ({
+            id,
             name: item.name,
-            quantity: item.quantity,
             price: item.price,
-            totalPrice: item.quantity * item.price
+            quantity: item.quantity,
         }));
 
-        const totalCost = orderDetails.reduce((sum, item) => sum + item.totalPrice, 0);
+        // 2. Save the data to local storage (the checkout page looks for this key)
+        localStorage.setItem('checkoutCart', JSON.stringify(cartArray));
 
-        const orderData = {
-            userId: userId,
-            status: 'New',
-            timestamp: serverTimestamp(),
-            appId: appId,
-            totalItems: totalItems,
-            totalCost: totalCost,
-            items: orderDetails, 
-        };
-
-        try {
-            // Firestore path: /artifacts/{appId}/users/{userId}/bakery_orders
-            const userOrdersCollectionRef = collection(dbInstance, 'artifacts', appId, 'users', userId, 'bakery_orders');
-            await addDoc(userOrdersCollectionRef, orderData);
-            
-            setStatusMessage(`Order successfully placed! You ordered ${totalItems} items for €${totalCost.toFixed(2)}.`);
-            setCart({}); // Clear the cart
-            setIsCartOpen(false); // Close the cart
-
-        } catch (error) {
-            console.error("Error placing order:", error);
-            setStatusMessage('Error: Failed to place order. Please try again.');
-        } finally {
-            setIsCheckingOut(false);
-        }
+        // 3. Redirect the user to the standalone checkout page
+        // NOTE: Path updated to the correct file path.
+        window.location.href = '/checkout.jsx'; 
     };
 
     // 4. Filtering Logic
@@ -567,15 +562,14 @@ const App = () => {
                 {/* Overlay for readability - REDUCED OPACITY FROM /80 TO /50 */}
                 <div className="absolute inset-0 bg-slate-800/50 backdrop-blur-[1px]"></div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl sm:text-6xl font-serif font-black text-white leading-tight">
-                        Artisan Sweets & Provisions
-                    </h1>
-                    <p className="mt-3 text-lg sm:text-xl text-amber-200 max-w-4xl mx-auto italic">
-                        Hand-crafted daily with the finest, all-natural ingredients.
-                    </p>
-                    {/* Current ID removed from header as requested */}
-                </div>
+                <div className="relative z-20 max-w-7xl mx-auto h-full flex flex-col justify-center p-6 sm:p-10">
+                                    <h1 className="text-4xl sm:text-6xl font-extrabold font-serif text-white drop-shadow-2xl tracking-tight">
+                                        Artisan Sweets & Provisions
+                                    </h1>
+                                    <p className="text-xl text-gray-300 mt-2 font-light italic border-l-4 border-amber-500 pl-4">
+                                        Hand-crafted daily with the finest, all-natural ingredients.
+                                    </p>
+                                </div>
             </header>
 
             {/* Main Content & Menu Grid */}
@@ -655,8 +649,6 @@ const App = () => {
                 isVisible={isCartOpen}
                 cart={cart}
                 setCart={setCart}
-                handleCheckout={handleCheckout}
-                isCheckingOut={isCheckingOut}
                 setIsCartOpen={setIsCartOpen}
             />
         </div>

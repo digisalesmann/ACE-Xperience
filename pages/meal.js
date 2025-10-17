@@ -4,26 +4,20 @@ import {
     Cake, Package, Utensils, ShoppingCart, X, Plus, Minus, Send, Loader2, Euro, Zap, Filter, User, Coffee, Star, Croissant, Clock, ClipboardList, Check, ChefHat, Soup, Drumstick
 } from 'lucide-react';
 
-// --- FIREBASE IMPORTS AND CONFIG ---
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, addDoc, query, onSnapshot, serverTimestamp } from 'firebase/firestore';
 
-// Global variables injected by the environment (MANDATORY USE)
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? initialAuthToken : null;
 
-// --- CUSTOM THEME COLOR & ASSETS ---
-const LIGHT_BG_COLOR = '#FBF5E5'; // Soft, cream color for light mode background
-const ACCENT_COLOR = '#D97706'; // Rich orange/amber for main actions
+const LIGHT_BG_COLOR = '#FBF5E5';
+const ACCENT_COLOR = '#D97706';
 
-// Single Hero Image for the Quick Meals view
 const HERO_IMAGE_URL = 'images/health.png';
 
-// --- DATA DEFINITION (CONSOLIDATED - ONLY QUICK MEALS) ---
 const MENU_ITEMS = [
-    // Nigerian Staples (6 items)
     { id: 'jollof-rice', name: 'Smoky Jollof Rice', price: 15.00, desc: 'Classic party rice dish cooked in a spicy tomato and pepper base. Served plain.', size: 'Bowl', icon: 'Drumstick', image: 'images/smoky.jpg', category: 'Nigerian Staples' },
     { id: 'fried-rice', name: 'Premium Fried Rice', price: 16.50, desc: 'Wok-fried rice mixed with finely chopped liver, shrimp, and diced vegetables.', size: 'Bowl', icon: 'Drumstick', image: 'images/fri.jpg', category: 'Nigerian Staples' },
     { id: 'white-rice-stew', name: 'White Rice & Rich Stew', price: 14.00, desc: 'Fluffy white rice served with a robust, slow-simmered tomato and pepper beef stew.', size: 'Plate', icon: 'Drumstick', image: 'images/stew.jpg', category: 'Nigerian Staples' },
@@ -31,7 +25,6 @@ const MENU_ITEMS = [
     { id: 'coconut-rice', name: 'Coconut Jollof Rice', price: 17.00, desc: 'Fragrant basmati rice cooked in creamy coconut milk and subtle spices.', size: 'Bowl', icon: 'Utensils', image: 'images/coco.jpg', category: 'Nigerian Staples' },
     { id: 'asun-jollof', name: 'Asun Fried Combo', price: 22.00, desc: 'Smoky Jollof rice served with spicy roasted goat meat (Asun).', size: 'Plate', icon: 'Star', image: 'images/asunn.jpg', category: 'Nigerian Staples' },
     
-    // Soups & Swallows (6 items)
     { id: 'egusi-pounded', name: 'Egusi Soup & Pounded Yam', price: 24.00, desc: 'Melon seed soup (Egusi) with spinach, meat, and smoked fish, served with pounded yam.', size: 'Set', icon: 'Soup', image: 'images/pound.jpg', category: 'Soups & Swallows' },
     { id: 'afang-soup', name: 'Afang Soup & Garri', price: 26.00, desc: 'A rich Efik/Ibibio soup made with Afang leaves and waterleaf, served with Garri.', size: 'Set', icon: 'Soup', image: 'images/afang.jpg', category: 'Soups & Swallows' },
     { id: 'ogbono-soup', name: 'Ogbono Soup & Amala', price: 24.50, desc: 'Slender, drawing soup made from ogbono seeds, served with Amala (Yam Flour).', size: 'Set', icon: 'Soup', image: 'images/ogbo.jpg', category: 'Soups & Swallows' },
@@ -39,7 +32,6 @@ const MENU_ITEMS = [
     { id: 'edikang-ikong', name: 'Edikang Ikong & Fufu', price: 25.50, desc: 'Vegetable soup (Waterleaf & Ugu) richly prepared, served with Cassava Fufu.', size: 'Set', icon: 'Soup', image: 'https://i.pinimg.com/736x/e2/6f/92/e26f921977e1636c4f3cda56b276c789.jpg', category: 'Soups & Swallows' },
     { id: 'ewedu-gbegiri', name: 'Ewedu & Gbegiri', price: 23.00, desc: 'Classic Yoruba combo of Jute leaf soup (Ewedu) and blended beans soup (Gbegiri).', size: 'Set', icon: 'Soup', image: 'https://i.pinimg.com/736x/2e/b7/09/2eb709b27d19bd840aa61b5c0ea6d583.jpg', category: 'Soups & Swallows' },
 
-    // Short Eats / Snacks (13 items)
     { id: 'meat-pie-ng', name: 'Gourmet Meat Pie', price: 6.00, desc: 'Flaky pastry filled with seasoned minced beef, carrots, and potatoes.', size: 'Single', icon: 'Package', image: 'https://i.pinimg.com/1200x/d1/66/00/d16600f2a328617ae97953cc22905529.jpg', category: 'Short Eats' },
     { id: 'chicken-pie-ng', name: 'Savory Chicken Pie', price: 6.50, desc: 'Rich chicken, vegetables, and creamy sauce filling in a buttery crust.', size: 'Single', icon: 'Package', image: 'https://i.pinimg.com/1200x/a4/08/23/a40823f1ea7e1ad3e2fa0a139477dbcb.jpg', category: 'Short Eats' },
     { id: 'sausage-roll-ng', name: 'Puff Sausage Roll', price: 4.50, desc: 'Seasoned sausage wrapped in light, layered puff puff pastry.', size: 'Single', icon: 'Package', image: 'https://i.pinimg.com/1200x/7f/13/b0/7f13b0698aaef23f6d57d3b37190e7ef.jpg', category: 'Short Eats' },
@@ -62,10 +54,7 @@ const getItemDetails = (id) => {
     return MENU_ITEMS.find(item => item.id === id);
 };
 const allRecipes = MENU_ITEMS; 
-// --- END DATA DEFINITION ---
 
-
-// Map string names to Lucide components
 const ICON_MAP = {
     Cake: Cake, Package: Package, Utensils: Utensils, ShoppingCart: ShoppingCart, 
     X: X, Plus: Plus, Minus: Minus, Send: Send, Loader2: Loader2, Euro: Euro, 
@@ -73,17 +62,13 @@ const ICON_MAP = {
     Clock: Clock, ClipboardList: ClipboardList, Check: Check, ChefHat: ChefHat, Soup: Soup, Drumstick: Drumstick
 };
 
-// --- UTILITY COMPONENT: PRODUCT CARD ---
-
 const ProductCard = ({ item, addToCart }) => {
     const [isAdded, setIsAdded] = useState(false);
-    // Resolve icon string to component
     const IconComponent = ICON_MAP[item.icon] || Utensils;
 
     const handleAddToCart = () => {
         addToCart(item);
         setIsAdded(true);
-        // Reset added state after a short delay
         const timer = setTimeout(() => setIsAdded(false), 800);
         return () => clearTimeout(timer);
     };
@@ -100,13 +85,11 @@ const ProductCard = ({ item, addToCart }) => {
                     src={item.image} 
                     alt={item.name} 
                     className="w-full h-full object-cover object-center"
-                    // Simple image fallback
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x300/B85F18/FFFFFF?text=Quick+Meal'; }}
                 />
                 <div className="absolute top-3 right-3 bg-red-800 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg flex items-center">
                     <Euro className="w-4 h-4 mr-1"/>{item.price.toFixed(2)}
                 </div>
-                {/* Display item category icon */}
                 <div className="absolute top-3 left-3 bg-white/90 dark:bg-slate-700/80 text-red-800 dark:text-orange-300 text-sm font-semibold p-2 rounded-full shadow-lg flex items-center">
                     <IconComponent className="w-4 h-4"/>
                 </div>
@@ -116,13 +99,12 @@ const ProductCard = ({ item, addToCart }) => {
                 <p className="text-xs font-medium text-red-800 dark:text-orange-400 mb-2 uppercase tracking-wider">{item.category} &middot; {item.size}</p>
                 <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 flex-grow line-clamp-2">{item.desc}</p>
                 
-                {/* Add to Cart Button with Feedback */}
                 <motion.button
                     onClick={handleAddToCart}
                     className={`w-full py-2.5 rounded-lg font-semibold flex items-center justify-center transition duration-300 shadow-md mt-auto
                         ${isAdded 
-                            ? 'bg-red-800 text-white shadow-red-800/50' // Deep red for added confirmation
-                            : 'bg-slate-800 text-orange-200 hover:bg-slate-700 shadow-slate-800/30' // Dark action button
+                            ? 'bg-red-800 text-white shadow-red-800/50'
+                            : 'bg-slate-800 text-orange-200 hover:bg-slate-700 shadow-slate-800/30'
                         }`}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -190,15 +172,13 @@ const CartSidebar = ({ isVisible, cart, setCart, handleCheckout, isCheckingOut, 
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    className="fixed inset-0 z-[60]" // Backdrop z-index
+                    className="fixed inset-0 z-[60]"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                 >
-                    {/* Backdrop */}
                     <div className="absolute inset-0 bg-slate-900/80" onClick={() => setIsCartOpen(false)}></div>
 
-                    {/* Sidebar Content (Higher Z-index) */}
                     <motion.div
                         className="fixed right-0 top-0 w-full md:w-[28rem] h-full bg-white dark:bg-slate-900 shadow-2xl flex flex-col z-[70]" 
                         initial={{ x: '100%' }}
@@ -262,7 +242,6 @@ const CartSidebar = ({ isVisible, cart, setCart, handleCheckout, isCheckingOut, 
                             )}
                         </div>
 
-                        {/* Footer / Checkout */}
                         <div className="p-6 border-t border-gray-200 dark:border-slate-700 sticky bottom-0 bg-white dark:bg-slate-900">
                             <div className="flex justify-between text-2xl font-serif font-extrabold mb-5 text-slate-800 dark:text-white">
                                 <span>Order Total:</span>
@@ -294,10 +273,7 @@ const CartSidebar = ({ isVisible, cart, setCart, handleCheckout, isCheckingOut, 
     );
 };
 
-
-// --- UTILITY COMPONENT: MOBILE/DRAWER FILTER ---
 const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, setIsFilterDrawerOpen }) => {
-    // Only Quick Meals categories are used now
     const viewCategories = ALL_CATEGORIES;
     
     const handleCategorySelect = (category) => {
@@ -306,7 +282,6 @@ const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, 
     }
     
     const getDisplayCategory = (category) => {
-        // Map the internal 'All Products' equivalent to the external 'All Quick Meals' label
         return category === 'All Products' ? 'All Quick Meals' : category;
     }
 
@@ -314,15 +289,13 @@ const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, 
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    className="fixed inset-0 z-[60]" // Backdrop z-index
+                    className="fixed inset-0 z-[60]"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                 >
-                    {/* Backdrop */}
                     <div className="absolute inset-0 bg-slate-900/80" onClick={() => setIsFilterDrawerOpen(false)}></div>
 
-                    {/* Filter Sidebar Content */}
                     <motion.div
                         className="fixed left-0 top-0 w-full md:w-[20rem] h-full bg-white dark:bg-slate-900 shadow-2xl flex flex-col z-[70]"
                         initial={{ x: '-100%' }}
@@ -330,7 +303,6 @@ const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, 
                         exit={{ x: '-100%' }}
                         transition={{ type: 'spring', stiffness: 200, damping: 25 }}
                     >
-                        {/* Header */}
                         <div className="p-6 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center sticky top-0 bg-white dark:bg-slate-900 z-10">
                             <h2 className="text-3xl font-serif font-bold text-slate-800 dark:text-white flex items-center">
                                 <Filter className="w-7 h-7 mr-3 text-red-800 dark:text-orange-400" /> 
@@ -345,7 +317,6 @@ const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, 
                             </motion.button>
                         </div>
 
-                        {/* Filter Categories List */}
                         <div className="flex-grow overflow-y-auto p-6 space-y-3">
                             {ALL_CATEGORIES.map(category => (
                                 <motion.button
@@ -370,9 +341,6 @@ const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, 
     );
 };
 
-
-// --- MAIN APP COMPONENT ---
-
 const App = () => {
     const [isAuthReady, setIsAuthReady] = useState(false);
     const [userId, setUserId] = useState(null);
@@ -381,12 +349,11 @@ const App = () => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const [statusMessage, setStatusMessage] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('All Products'); // Reset logic is simpler now
+    const [selectedCategory, setSelectedCategory] = useState('All Products');
     const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false); 
 
     const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
 
-    // 1. Firebase Initialization and Authentication
     useEffect(() => {
         if (!firebaseConfig.apiKey) {
             console.error("Firebase config is missing. Cannot initialize Firestore.");
@@ -417,7 +384,7 @@ const App = () => {
                         }
                     } catch (error) {
                         console.error("Authentication failed:", error);
-                        setUserId(crypto.randomUUID()); // Fallback to a random ID if auth fails
+                        setUserId(crypto.randomUUID());
                     } finally {
                         setIsAuthReady(true);
                     }
@@ -431,7 +398,6 @@ const App = () => {
         }
     }, []);
 
-    // 2. Cart Handlers
     const addToCart = useCallback((item) => {
         setCart(prev => {
             const currentItem = prev[item.id];
@@ -447,7 +413,6 @@ const App = () => {
         setStatusMessage('');
     }, []);
     
-    // 3. Checkout Handler (Save order to Firestore)
     const handleCheckout = async () => {
         if (totalItems === 0 || !userId || !dbInstance || isCheckingOut) return;
 
@@ -475,13 +440,12 @@ const App = () => {
         };
 
         try {
-            // Firestore path: /artifacts/{appId}/users/{userId}/bakery_orders
             const userOrdersCollectionRef = collection(dbInstance, 'artifacts', appId, 'users', userId, 'bakery_orders');
             await addDoc(userOrdersCollectionRef, orderData);
             
             setStatusMessage(`Order successfully placed! You ordered ${totalItems} items for €${totalCost.toFixed(2)}.`);
-            setCart({}); // Clear the cart
-            setIsCartOpen(false); // Close the cart
+            setCart({});
+            setIsCartOpen(false);
 
         } catch (error) {
             console.error("Error placing order:", error);
@@ -491,7 +455,6 @@ const App = () => {
         }
     };
 
-    // 4. Filtering Logic
     const filteredItems = useMemo(() => {
         if (selectedCategory === 'All Products') {
             return allRecipes;
@@ -499,7 +462,6 @@ const App = () => {
         return allRecipes.filter(item => item.category === selectedCategory);
     }, [selectedCategory]);
 
-    // Group items by category for the main layout view
     const groupedItems = useMemo(() => {
         if (selectedCategory !== 'All Products') {
             return {};
@@ -512,9 +474,8 @@ const App = () => {
     }, [filteredItems, selectedCategory]);
 
 
-    // Determine the current heading title
     const mainTitle = selectedCategory === 'All Products' 
-        ? 'All Quick Meals Menu'
+        ? 'Meals Menu'
         : `${selectedCategory} Menu`;
 
 
@@ -531,7 +492,6 @@ const App = () => {
         <div 
             className="min-h-screen font-sans text-slate-800 dark:text-gray-100" 
         >
-            {/* GLOBAL STYLE FIXES: Ensures dark mode background adoption */}
             <style jsx global>{`
                 body {
                     background-color: ${LIGHT_BG_COLOR}; 
@@ -556,7 +516,6 @@ const App = () => {
                 }
             `}</style>
 
-            {/* Floating Cart Button (z-40 to be above the hero content but below drawers) */}
             <motion.button
                 onClick={() => setIsCartOpen(true)}
                 className="fixed bottom-6 right-6 z-40 p-4 bg-slate-800 text-orange-200 rounded-full shadow-2xl shadow-slate-900/40 flex items-center transition duration-200 hover:bg-slate-700 hover:scale-105"
@@ -576,7 +535,6 @@ const App = () => {
                 )}
             </motion.button>
 
-            {/* Header/Hero Section - Bold, Permanent Quick Meals Hero */}
             <header 
                 className="relative pt-20 pb-16 md:pt-28 md:pb-24 shadow-lg overflow-hidden z-20"
                 style={{ 
@@ -585,24 +543,21 @@ const App = () => {
                     backgroundPosition: 'center',
                 }}
             >
-                {/* Overlay for readability - Deep Slate/Red overlay for rich contrast */}
                 <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px]"></div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-5xl sm:text-7xl font-serif font-black text-white leading-tight drop-shadow-xl">
+                <div className="relative z-20 max-w-7xl mx-auto h-full flex flex-col justify-center p-6 sm:p-10">
+                    <h1 className="text-4xl sm:text-6xl font-extrabold font-serif text-white drop-shadow-2xl tracking-tight">
                         Afro-Fusion Kitchen
                     </h1>
-                    <p className="mt-3 text-xl sm:text-2xl text-orange-200 max-w-4xl mx-auto italic font-medium">
+                    <p className="text-xl text-gray-300 mt-2 font-light italic border-l-4 border-amber-500 pl-4">
                         Authentic Nigerian & African Quick Meals
                     </p>
                 </div>
             </header>
 
-            {/* Main Content & Menu Grid */}
             <main className="py-10 md:py-16 bg-inherit dark:bg-inherit">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     
-                    {/* Status Message */}
                     <AnimatePresence>
                         {statusMessage && (
                             <motion.div
@@ -617,7 +572,6 @@ const App = () => {
                         )}
                     </AnimatePresence>
 
-                    {/* Filter Section - Filter is essential */}
                     <div className="mb-10 flex justify-between items-center">
                         <h2 className="text-3xl font-serif font-extrabold text-slate-800 dark:text-white flex items-center">
                             <ChefHat className="w-6 h-6 text-red-800 mr-3 dark:text-orange-400" />
@@ -637,9 +591,6 @@ const App = () => {
                         </motion.button>
                     </div>
 
-                    {/* --- CONDITIONAL LAYOUT RENDERING --- */}
-
-                    {/* 1. Standard Grid Layout (Used for filtered views) */}
                     {selectedCategory !== 'All Products' && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 sm:gap-8">
                             <AnimatePresence mode="wait">
@@ -654,7 +605,6 @@ const App = () => {
                         </div>
                     )}
                     
-                    {/* 2. Categorized Section Layout (Used ONLY for 'All Quick Meals' view) */}
                     {selectedCategory === 'All Products' && (
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-12">
                             {Object.keys(groupedItems).map(category => (
@@ -690,7 +640,6 @@ const App = () => {
                 </div>
             </main>
 
-            {/* Filter Drawer Sidebar (Left side) - Uses z-index 70 for priority */}
             <MobileDrawerFilter
                 isVisible={isFilterDrawerOpen}
                 selectedCategory={selectedCategory}
@@ -698,7 +647,6 @@ const App = () => {
                 setIsFilterDrawerOpen={setIsFilterDrawerOpen}
             />
 
-            {/* Shopping Cart Sidebar (Right side) - Uses z-index 70 for priority */}
             <CartSidebar 
                 isVisible={isCartOpen}
                 cart={cart}
