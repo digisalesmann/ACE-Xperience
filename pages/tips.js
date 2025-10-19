@@ -18,7 +18,38 @@ import {
 
 
 // =================================================================
-// --- Data Definitions (Keeping these concise) ---
+// --- SLUG GENERATION UTILITY ---
+// =================================================================
+
+/**
+ * Generates a URL-friendly, unique slug from a data item.
+ * Combines step/title/skill for a robust, detailed, and unique URL.
+ * @param {object} item - The data object containing step, title, and skill.
+ * @returns {string} The generated slug.
+ */
+const generateSlug = (item) => {
+  // Utility to convert text to kebab-case
+  const toKebabCase = (text) => {
+    if (!text) return '';
+    return text.toLowerCase()
+      // Remove all non-word characters (excluding hyphens)
+      .replace(/[^\w\s-]/g, '')
+      // Replace all spaces, underscores, and multiple hyphens with a single hyphen
+      .replace(/[\s_-]+/g, '-')
+      // Trim leading/trailing hyphens
+      .replace(/^-+|-+$/g, '');
+  };
+
+  const titleSlug = toKebabCase(item.title);
+  const skillSlug = toKebabCase(item.skill);
+
+  // Slug Format: [step]-[title]-[skill] (e.g., 4-advanced-baking-yeast-gluten-management)
+  return `${item.step}-${titleSlug}-${skillSlug}`;
+};
+
+
+// =================================================================
+// --- Data Definitions ---
 // =================================================================
 
 const techniqueCategories = [
@@ -60,12 +91,22 @@ const techniqueCategories = [
     },
 ];
 
-const skillsRoadmap = [
-    { step: 1, title: 'Foundational Prep', skill: 'Knife Skills, Mise en Place', link: '/techniques/knife-mastery' },
-    { step: 2, title: 'Heat Control', skill: 'Searing, Broiling, Roasting', link: '/techniques/searing-frying' },
-    { step: 3, title: 'Sauce Construction', skill: 'Emulsification, Reduction', link: '/techniques/sauce-fundamentals' },
-    { step: 4, title: 'Advanced Baking', skill: 'Yeast/Gluten Management', link: '/techniques/bread-science' },
+// Base Roadmap Data (Note: The link here is a placeholder and will be replaced by the slug)
+const baseSkillsRoadmap = [
+    { step: 1, title: 'Foundational Prep', skill: 'Knife Skills, Mise en Place' },
+    { step: 2, title: 'Heat Control', skill: 'Searing, Broiling, Roasting' },
+    { step: 3, title: 'Sauce Construction', skill: 'Emulsification, Reduction' },
+    { step: 4, title: 'Advanced Baking', skill: 'Yeast/Gluten Management' },
 ];
+
+// **PROCESS THE DATA TO CREATE SLUGS**
+const skillsRoadmap = baseSkillsRoadmap.map(item => ({
+    ...item,
+    // Add the detailed slug
+    slug: generateSlug(item),
+    // Update the link to use the new slug, pointing to a dynamic route like /techniques/[slug]
+    link: `/techniques/${generateSlug(item)}`,
+}));
 
 const quickTips = {
     Timing: [
@@ -113,14 +154,16 @@ const VideoHeroSection = () => (
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-50 dark:opacity-30"
+            // BRIGHTNESS CHANGE: Increased opacity from opacity-50 dark:opacity-30 to opacity-80 dark:opacity-60
+            className="absolute inset-0 w-full h-full object-cover opacity-80 dark:opacity-60" 
             src="/videos/vid.mp4" 
         >
             <source src="/images/hero-fallback.jpg" type="image/jpeg" /> 
         </video>
 
         {/* Overlay for contrast and a subtle gradient sweep */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-black/80 to-black/30 dark:from-gray-950/90 dark:to-gray-950/40"></div>
+        {/* BRIGHTNESS CHANGE: Made the overlay slightly lighter by adjusting the 'to' color from black/30 to black/20 and dark:to-gray-950/40 to dark:to-gray-950/30 */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-black/80 to-black/20 dark:from-gray-950/90 dark:to-gray-950/30"></div>
         
         {/* Content Container - Use fixed padding and auto margins to center content correctly */}
         <div className="relative z-10 p-8 sm:p-12 lg:p-20 max-w-7xl h-full flex flex-col justify-center mx-auto"> 
@@ -150,6 +193,7 @@ const TechniqueCard = ({ category }) => {
 
     return (
         <Link 
+            // This link is already slug-based and correct
             href={`/techniques/${category.slug}`}
             className="group block h-full focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-500 rounded-3xl"
         >
@@ -161,7 +205,8 @@ const TechniqueCard = ({ category }) => {
                         loading="lazy"
                         src={`/${category.image}`}
                         alt={`Visual cue for ${category.title}`}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 dark:opacity-40"
+                        // BRIGHTNESS CHANGE: Increased opacity from opacity-70 dark:opacity-40 to opacity-90 dark:opacity-70
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 dark:opacity-70"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent"></div>
                     
@@ -213,7 +258,8 @@ const SkillsRoadmapSection = () => (
             {skillsRoadmap.map((item, index) => (
                 <Link
                     key={item.step}
-                    href={item.link}
+                    // This link now uses the robust, detailed slug
+                    href={item.link} 
                     className="block group bg-white dark:bg-gray-800 p-4 sm:p-8 rounded-2xl shadow-xl border-t-4 border-amber-500/0 hover:border-amber-500 transition-all duration-300 hover:shadow-3xl transform hover:scale-[1.01]"
                 >
                     <div className="flex items-start">
@@ -240,6 +286,37 @@ const SkillsRoadmapSection = () => (
         </div>
     </section>
 );
+
+// --- TipCard Component (New component for Quick Tips) ---
+const TipCard = ({ tip, index }) => (
+    <Link 
+        key={tip.id} 
+        // This link is already slug-based and correct
+        href={`/tips/${tip.slug}`} 
+        className="block group bg-amber-50 dark:bg-gray-700/50 p-5 rounded-2xl shadow-sm border border-amber-100 dark:border-gray-700 transition-all duration-300 hover:shadow-lg hover:border-amber-300 dark:hover:border-red-800"
+    >
+        <div className="flex items-start">
+            {/* Number/Icon */}
+            <div className="flex items-center justify-center w-10 h-10 mr-4 text-lg font-extrabold text-white bg-red-600 rounded-full flex-shrink-0 shadow-md">
+                {index + 1}
+            </div>
+            
+            {/* Tip Content */}
+            <div className="flex-grow">
+                <h4 className="text-xl font-bold font-serif text-gray-900 dark:text-white mb-1 group-hover:text-red-600 transition-colors">
+                    {tip.title}
+                </h4>
+                <p className="text-gray-700 dark:text-gray-300 text-base">
+                    {tip.excerpt}
+                </p>
+            </div>
+
+            {/* Arrow */}
+            <ChevronRight className="w-6 h-6 ml-4 text-red-500 transition-transform duration-300 group-hover:translate-x-1 flex-shrink-0 mt-1" />
+        </div>
+    </Link>
+);
+
 
 // ===============================
 // --- Tips & Techniques Page ---
@@ -306,31 +383,7 @@ const TipsAndTechniquesPage = () => {
                         {/* Tab Content List */}
                         <div className="space-y-6">
                             {quickTips[activeTipTab].map((tip, index) => (
-                                <Link 
-                                    key={tip.id} 
-                                    href={`/tips/${tip.slug}`} 
-                                    className="block group bg-amber-50 dark:bg-gray-700/50 p-5 rounded-2xl shadow-sm border border-amber-100 dark:border-gray-700 transition-all duration-300 hover:shadow-lg hover:border-amber-300 dark:hover:border-red-800"
-                                >
-                                    <div className="flex items-start">
-                                        {/* Number/Icon */}
-                                        <div className="flex items-center justify-center w-10 h-10 mr-4 text-lg font-extrabold text-white bg-red-600 rounded-full flex-shrink-0 shadow-md">
-                                            {index + 1}
-                                        </div>
-                                        
-                                        {/* Tip Content */}
-                                        <div className="flex-grow">
-                                            <h4 className="text-xl font-bold font-serif text-gray-900 dark:text-white mb-1 group-hover:text-red-600 transition-colors">
-                                                {tip.title}
-                                            </h4>
-                                            <p className="text-gray-700 dark:text-gray-300 text-base">
-                                                {tip.excerpt}
-                                            </p>
-                                        </div>
-
-                                        {/* Arrow */}
-                                        <ChevronRight className="w-6 h-6 ml-4 text-red-500 transition-transform duration-300 group-hover:translate-x-1 flex-shrink-0 mt-1" />
-                                    </div>
-                                </Link>
+                                <TipCard tip={tip} index={index} key={tip.id} />
                             ))}
                         </div>
                     </div>
