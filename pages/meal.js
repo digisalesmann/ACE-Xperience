@@ -12,10 +12,11 @@ const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? initialAuthToken : null;
 
+// --- CONSTANTS ---
 const LIGHT_BG_COLOR = '#FBF5E5';
-const ACCENT_COLOR = '#D97706';
-
 const HERO_IMAGE_URL = 'images/health.png';
+
+const PERSISTENCE_KEY = 'siteCart'; // Key for localStorage persistence
 
 const MENU_ITEMS = [
     { id: 'jollof-rice', name: 'Smoky Jollof Rice', price: 15.00, desc: 'Classic party rice dish cooked in a spicy tomato and pepper base. Served plain.', size: 'Bowl', icon: 'Drumstick', image: 'images/smoky.jpg', category: 'Nigerian Staples' },
@@ -62,6 +63,7 @@ const ICON_MAP = {
     Clock: Clock, ClipboardList: ClipboardList, Check: Check, ChefHat: ChefHat, Soup: Soup, Drumstick: Drumstick
 };
 
+// --- UTILITY COMPONENT: PRODUCT CARD ---
 const ProductCard = ({ item, addToCart }) => {
     const [isAdded, setIsAdded] = useState(false);
     const IconComponent = ICON_MAP[item.icon] || Utensils;
@@ -138,10 +140,29 @@ const ProductCard = ({ item, addToCart }) => {
     );
 };
 
-
 // --- UTILITY COMPONENT: CART SIDEBAR ---
 
-const CartSidebar = ({ isVisible, cart, setCart, handleCheckout, isCheckingOut, setIsCartOpen }) => {
+const CartSidebar = ({ isVisible, cart, setCart, setIsCartOpen }) => { 
+    // New function defined locally to handle checkout redirection and data transfer
+    const handleLocalCheckout = () => {
+        if (totalItems === 0) return;
+
+        // 1. Convert cart object to a serializable array format for local storage
+        const cartArray = Object.entries(cart).map(([id, item]) => ({
+            id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+        }));
+
+        // 2. Save the data to local storage (the checkout page looks for this key)
+        localStorage.setItem('checkoutCart', JSON.stringify(cartArray));
+
+        // 3. Redirect the user to the standalone checkout page
+        // NOTE: Path updated to the correct file path.
+        window.location.href = '/checkout'; 
+    };
+
     const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
     const subtotal = Object.values(cart).reduce((sum, item) => sum + item.quantity * item.price, 0);
 
@@ -242,28 +263,24 @@ const CartSidebar = ({ isVisible, cart, setCart, handleCheckout, isCheckingOut, 
                             )}
                         </div>
 
+                        {/* Footer / Checkout Button to Redirect */}
                         <div className="p-6 border-t border-gray-200 dark:border-slate-700 sticky bottom-0 bg-white dark:bg-slate-900">
                             <div className="flex justify-between text-2xl font-serif font-extrabold mb-5 text-slate-800 dark:text-white">
                                 <span>Order Total:</span>
                                 <span className="flex items-center"><Euro className="w-6 h-6 mr-1" />{subtotal.toFixed(2)}</span>
                             </div>
                             <motion.button
-                                onClick={handleCheckout}
-                                disabled={cartIsEmpty || isCheckingOut}
+                                onClick={handleLocalCheckout} // Uses the local handler for redirection
+                                disabled={cartIsEmpty}
                                 className={`w-full py-4 text-xl font-bold rounded-xl flex items-center justify-center transition duration-300 shadow-xl
-                                    ${cartIsEmpty || isCheckingOut 
-                                        ? 'bg-gray-300 text-gray-600 cursor-not-allowed' 
-                                        : 'bg-red-800 text-white hover:bg-red-900 focus:ring-4 focus:ring-red-500/50'
+                                    ${cartIsEmpty
+                                        ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                                        : 'bg-slate-800 text-orange-200 hover:bg-slate-900 focus:ring-4 focus:ring-red-500/50'
                                     }`}
-                                whileHover={!cartIsEmpty && !isCheckingOut ? { scale: 1.01 } : {}}
-                                whileTap={!cartIsEmpty && !isCheckingOut ? { scale: 0.98 } : {}}
+                                whileHover={!cartIsEmpty ? { scale: 1.01 } : {}}
+                                whileTap={!cartIsEmpty ? { scale: 0.98 } : {}}
                             >
-                                {isCheckingOut ? (
-                                    <Loader2 className="w-6 h-6 mr-3 animate-spin" />
-                                ) : (
-                                    <Send className="w-6 h-6 mr-3" />
-                                )}
-                                {isCheckingOut ? 'Finalizing Order...' : 'Request Order'}
+                                <Send className="w-6 h-6 mr-3" /> Proceed to Checkout
                             </motion.button>
                         </div>
                     </motion.div>
@@ -273,17 +290,23 @@ const CartSidebar = ({ isVisible, cart, setCart, handleCheckout, isCheckingOut, 
     );
 };
 
+// --- UTILITY COMPONENT: MOBILE/DRAWER FILTER ---
 const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, setIsFilterDrawerOpen }) => {
     const viewCategories = ALL_CATEGORIES;
     
     const handleCategorySelect = (category) => {
-        setSelectedCategory(category);
+        // Correctly handle the 'All Quick Meals' mapping back to 'All Products' for filtering logic
+        setSelectedCategory(category === 'All Quick Meals' ? 'All Products' : category);
         setIsFilterDrawerOpen(false);
     }
     
     const getDisplayCategory = (category) => {
+        // Ensure display logic maps back correctly
         return category === 'All Products' ? 'All Quick Meals' : category;
     }
+
+    // Determine the current selected category for styling purposes
+    const effectiveSelectedCategory = getDisplayCategory(selectedCategory);
 
     return (
         <AnimatePresence>
@@ -321,16 +344,16 @@ const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, 
                             {ALL_CATEGORIES.map(category => (
                                 <motion.button
                                     key={category}
-                                    onClick={() => handleCategorySelect(category === 'All Quick Meals' ? 'All Products' : category)} 
+                                    onClick={() => handleCategorySelect(category)} 
                                     className={`w-full text-left py-3 px-4 rounded-lg font-semibold flex items-center transition duration-200 border-2
-                                        ${(selectedCategory === category) || (selectedCategory === 'All Products' && category === 'All Quick Meals')
+                                        ${effectiveSelectedCategory === category
                                             ? 'bg-red-800 text-white border-red-800 shadow-md'
                                             : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-gray-300 border-gray-300 dark:border-slate-700 hover:bg-orange-50 dark:hover:bg-slate-700'
                                         }`}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
-                                    <ClipboardList className="w-5 h-5 mr-3"/> {getDisplayCategory(category)}
+                                    <ClipboardList className="w-5 h-5 mr-3"/> {category}
                                 </motion.button>
                             ))}
                         </div>
@@ -341,19 +364,45 @@ const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, 
     );
 };
 
+// --- MAIN APP COMPONENT ---
 const App = () => {
     const [isAuthReady, setIsAuthReady] = useState(false);
     const [userId, setUserId] = useState(null);
     const [dbInstance, setDbInstance] = useState(null);
-    const [cart, setCart] = useState({});
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const [statusMessage, setStatusMessage] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All Products');
     const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false); 
 
+    // 1. Initialize Cart from Persistence (or default empty)
+    const initialCart = useMemo(() => {
+        try {
+            const storedCart = localStorage.getItem(PERSISTENCE_KEY);
+            if (storedCart) {
+                return JSON.parse(storedCart);
+            }
+        } catch (e) {
+            console.error("Error loading cart from localStorage:", e);
+        }
+        return {}; // Default to empty object if storage fails
+    }, []);
+    
+    const [cart, setCart] = useState(initialCart);
+
     const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
 
+    // 2. Effect to Handle Persistence Save (Runs whenever cart state changes)
+    useEffect(() => {
+        try {
+            localStorage.setItem(PERSISTENCE_KEY, JSON.stringify(cart));
+        } catch (e) {
+            console.error("Error saving cart to localStorage:", e);
+        }
+    }, [cart]);
+
+
+    // 3. Firebase Initialization and Auth (Unchanged)
     useEffect(() => {
         if (!firebaseConfig.apiKey) {
             console.error("Firebase config is missing. Cannot initialize Firestore.");
@@ -372,7 +421,6 @@ const App = () => {
             onAuthStateChanged(authService, async (user) => {
                 if (user) {
                     setUserId(user.uid);
-                    setIsAuthReady(true);
                 } else {
                     try {
                         if (initialAuthToken) {
@@ -413,57 +461,20 @@ const App = () => {
         setStatusMessage('');
     }, []);
     
-    const handleCheckout = async () => {
-        if (totalItems === 0 || !userId || !dbInstance || isCheckingOut) return;
-
-        setIsCheckingOut(true);
-        setStatusMessage('');
-
-        const orderDetails = Object.entries(cart).map(([id, item]) => ({
-            itemId: id,
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price,
-            totalPrice: item.quantity * item.price
-        }));
-
-        const totalCost = orderDetails.reduce((sum, item) => sum + item.totalPrice, 0);
-
-        const orderData = {
-            userId: userId,
-            status: 'New',
-            timestamp: serverTimestamp(),
-            appId: appId,
-            totalItems: totalItems,
-            totalCost: totalCost,
-            items: orderDetails, 
-        };
-
-        try {
-            const userOrdersCollectionRef = collection(dbInstance, 'artifacts', appId, 'users', userId, 'bakery_orders');
-            await addDoc(userOrdersCollectionRef, orderData);
-            
-            setStatusMessage(`Order successfully placed! You ordered ${totalItems} items for €${totalCost.toFixed(2)}.`);
-            setCart({});
-            setIsCartOpen(false);
-
-        } catch (error) {
-            console.error("Error placing order:", error);
-            setStatusMessage('Error: Failed to place order. Please try again.');
-        } finally {
-            setIsCheckingOut(false);
-        }
-    };
+    // NOTE: Old handleCheckout (Firestore submit) removed. Replaced by local handler in CartSidebar.
 
     const filteredItems = useMemo(() => {
-        if (selectedCategory === 'All Products') {
+        const filterKey = selectedCategory === 'All Quick Meals' ? 'All Products' : selectedCategory;
+
+        if (filterKey === 'All Products') {
             return allRecipes;
         }
-        return allRecipes.filter(item => item.category === selectedCategory);
+        return allRecipes.filter(item => item.category === filterKey);
     }, [selectedCategory]);
 
     const groupedItems = useMemo(() => {
-        if (selectedCategory !== 'All Products') {
+        if (selectedCategory !== 'All Products' && selectedCategory !== 'All Quick Meals') {
+             // Only group when 'All Quick Meals' is selected (which maps to 'All Products' internally)
             return {};
         }
         return filteredItems.reduce((acc, item) => {
@@ -474,7 +485,7 @@ const App = () => {
     }, [filteredItems, selectedCategory]);
 
 
-    const mainTitle = selectedCategory === 'All Products' 
+    const mainTitle = selectedCategory === 'All Products' || selectedCategory === 'All Quick Meals'
         ? 'Meals Menu'
         : `${selectedCategory} Menu`;
 
@@ -495,18 +506,17 @@ const App = () => {
             <style jsx global>{`
                 body {
                     background-color: ${LIGHT_BG_COLOR}; 
-                    color: #1e293b; /* slate-800 */
+                    color: #1e293b; 
                     min-height: 100vh;
                     transition: background-color 0.3s;
                 }
                 .dark body {
-                    background-color: #0f172a; /* slate-900 */
-                    color: #f1f5f9; /* slate-100 */
+                    background-color: #0f172a; 
+                    color: #f1f5f9; 
                 }
                 .dark {
                     background-color: #0f172a; 
                 }
-                /* Apply background to the root element for seamless light/dark mode transition */
                 #__next, #root {
                     background-color: ${LIGHT_BG_COLOR};
                     transition: background-color 0.3s;
@@ -591,7 +601,7 @@ const App = () => {
                         </motion.button>
                     </div>
 
-                    {selectedCategory !== 'All Products' && (
+                    {selectedCategory !== 'All Products' && selectedCategory !== 'All Quick Meals' && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 sm:gap-8">
                             <AnimatePresence mode="wait">
                                 {filteredItems.map(item => (
@@ -605,7 +615,7 @@ const App = () => {
                         </div>
                     )}
                     
-                    {selectedCategory === 'All Products' && (
+                    {(selectedCategory === 'All Products' || selectedCategory === 'All Quick Meals') && (
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-12">
                             {Object.keys(groupedItems).map(category => (
                                 <section key={category}>
@@ -651,8 +661,6 @@ const App = () => {
                 isVisible={isCartOpen}
                 cart={cart}
                 setCart={setCart}
-                handleCheckout={handleCheckout}
-                isCheckingOut={isCheckingOut}
                 setIsCartOpen={setIsCartOpen}
             />
         </div>
