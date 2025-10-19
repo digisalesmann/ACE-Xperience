@@ -176,13 +176,13 @@ const BankTransferPayment = ({ finalOrderData, finalTotal, onPaymentConfirmed, o
 
             <div className="text-center p-4 bg-red-50 dark:bg-slate-700 rounded-lg">
                 <p className="text-xl font-semibold text-slate-800 dark:text-white">
-                    Please transfer the exact amount of:
+                    Please transfer the exact amount:
                 </p>
                 <p className="text-5xl font-extrabold font-serif text-red-800 dark:text-amber-400 my-2 flex items-center justify-center">
                     <Euro className="w-8 h-8 mr-2" />{finalTotal.toFixed(2)}
                 </p>
                 <p className="text-sm text-red-600 dark:text-amber-300 flex items-center justify-center mt-3">
-                    <Clock className="w-4 h-4 mr-2" /> Crucial: You must use the reference below for fast processing.
+                    Crucial: You must use the reference below for fast processing.
                 </p>
             </div>
 
@@ -461,10 +461,10 @@ const StandaloneCheckout = ({ dbInstance, userId, initialCart, onOrderSuccess, s
                             <User className="w-7 h-7 mr-3 text-red-800 dark:text-amber-400" /> Shipping & Contact Details
                         </h3>
 
-                        {/* Name and Contact */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Full Name Field */}
                             <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Full Name *</label>
+                                <label htmlFor="name" className="block text-sm font-bold uppercase text-amber-600 dark:text-amber-400 mb-2 tracking-wider">Full Name *</label>
                                 <input
                                     id="name"
                                     type="text"
@@ -473,12 +473,16 @@ const StandaloneCheckout = ({ dbInstance, userId, initialCart, onOrderSuccess, s
                                     onChange={handleChange}
                                     required
                                     placeholder="Enter your full name"
-                                    className={`w-full p-3 border rounded-lg transition dark:bg-slate-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 ${errors.name ? 'border-red-500' : 'border-gray-300 dark:border-slate-700'}`}
+                                    // Enhanced input styling with amber focus and smoother transition
+                                    className={`w-full p-4 border rounded-xl transition duration-300 shadow-sm dark:bg-gray-800 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-4 focus:ring-amber-200/50 focus:border-amber-500 text-lg
+                                        ${errors.name ? 'border-red-500 ring-red-200' : 'border-gray-300 dark:border-gray-700'}`}
                                 />
-                                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+                                {errors.name && <p className="text-red-500 text-sm mt-2">{errors.name}</p>}
                             </div>
+
+                            {/* Phone or Email Field - Placeholder alignment FIX applied */}
                             <div>
-                                <label htmlFor="contact" className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Phone or Email *</label>
+                                <label htmlFor="contact" className="block text-sm font-bold uppercase text-amber-600 dark:text-amber-400 mb-2 tracking-wider">Phone or Email *</label>
                                 <div className="relative">
                                     <input
                                         id="contact"
@@ -488,53 +492,97 @@ const StandaloneCheckout = ({ dbInstance, userId, initialCart, onOrderSuccess, s
                                         onChange={handleChange}
                                         required
                                         placeholder="Phone number or email address"
-                                        className={`w-full p-3 pl-10 border rounded-lg transition dark:bg-slate-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 ${errors.contact ? 'border-red-500' : 'border-gray-300 dark:border-slate-700'}`}
+                                        // pl-12 is kept here to push the text past the icon (icon is 1.5rem wide + 1rem padding = 2.5rem total offset)
+                                        className={`w-full p-4 pl-12 border rounded-xl transition duration-300 shadow-sm dark:bg-gray-800 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-4 focus:ring-amber-200/50 focus:border-amber-500 text-lg
+                                            ${errors.contact ? 'border-red-500 ring-red-200' : 'border-gray-300 dark:border-gray-700'}`}
                                     />
-                                    <Phone className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                                    {/* Icon position left-4 to align with pl-12 padding. Using 'Phone' from lucide-react. */}
+                                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-500 dark:text-amber-400" />
                                 </div>
-                                {errors.contact && <p className="text-red-500 text-xs mt-1">{errors.contact}</p>}
+                                {errors.contact && <p className="text-red-500 text-sm mt-2">{errors.contact}</p>}
                             </div>
                         </div>
 
-                        {/* Delivery Type */}
-                        <div className="space-y-3">
-                            <p className="text-lg font-bold text-slate-800 dark:text-gray-100">Order Method </p>
+                        {/* Delivery Type - Styled Radio Buttons as Selection Cards */}
+                        <div className="space-y-4">
+                            <p className="text-xl font-serif font-extrabold text-gray-900 dark:text-gray-100 mt-6">Choose Order Method</p>
                             <div className="flex flex-wrap gap-4 sm:gap-6">
-                                <label className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition w-full sm:w-auto ${customerDetails.deliveryType === 'pickup' ? 'border-red-800 bg-red-50 dark:bg-slate-700 shadow-md' : 'border-gray-300 dark:border-slate-700 hover:border-red-500 dark:hover:border-amber-400'}`}>
+
+                                {/* Pickup Option */}
+                                <label className={`flex items-center p-5 rounded-2xl border-2 cursor-pointer transition duration-300 flex-1 min-w-[200px]
+                                    ${customerDetails.deliveryType === 'pickup'
+                                        ? 'border-amber-600 bg-amber-50 dark:bg-amber-900/40 shadow-lg ring-4 ring-amber-200/50'
+                                        : 'border-gray-300 dark:border-gray-700 hover:border-amber-500 dark:hover:border-amber-400'
+                                    }`}
+                                >
+                                    {/* Custom Radio Button Style */}
                                     <input
                                         type="radio"
                                         name="deliveryType"
                                         value="pickup"
                                         checked={customerDetails.deliveryType === 'pickup'}
                                         onChange={handleChange}
-                                        className="form-radio text-red-800 h-5 w-5 mr-3"
+                                        className="hidden" // Hide native radio button
                                     />
-                                    <span className="font-semibold text-slate-800 dark:text-gray-200">Pickup (No fee)</span>
+                                    <div className="flex items-center">
+                                        {/* Custom Circular Radio Indicator */}
+                                        <div className={`w-6 h-6 rounded-full border-2 mr-4 flex items-center justify-center flex-shrink-0 transition duration-300
+                                            ${customerDetails.deliveryType === 'pickup'
+                                                ? 'border-amber-600 bg-amber-600 shadow-md'
+                                                : 'border-gray-400 dark:border-gray-500 bg-white dark:bg-gray-700'
+                                            }`}
+                                        >
+                                            {customerDetails.deliveryType === 'pickup' && (
+                                                <span className="w-2.5 h-2.5 rounded-full bg-white dark:bg-gray-900"></span>
+                                            )}
+                                        </div>
+                                        <span className="font-extrabold text-lg text-gray-800 dark:text-gray-100">
+                                            Pickup <span className="text-sm font-normal text-amber-600 dark:text-amber-400">(No Fee)</span>
+                                        </span>
+                                    </div>
                                 </label>
-                                <label className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition w-full sm:w-auto ${customerDetails.deliveryType === 'delivery' ? 'border-red-800 bg-red-50 dark:bg-slate-700 shadow-md' : 'border-gray-300 dark:border-slate-700 hover:border-red-500 dark:hover:border-amber-400'}`}>
+
+                                {/* Delivery Option */}
+                                <label className={`flex items-center p-5 rounded-2xl border-2 cursor-pointer transition duration-300 flex-1 min-w-[200px]
+                                    ${customerDetails.deliveryType === 'delivery'
+                                        ? 'border-amber-600 bg-amber-50 dark:bg-amber-900/40 shadow-lg ring-4 ring-amber-200/50'
+                                        : 'border-gray-300 dark:border-gray-700 hover:border-amber-500 dark:hover:border-amber-400'
+                                    }`}
+                                >
                                     <input
                                         type="radio"
                                         name="deliveryType"
                                         value="delivery"
                                         checked={customerDetails.deliveryType === 'delivery'}
                                         onChange={handleChange}
-                                        className="form-radio text-red-800 h-5 w-5 mr-3"
+                                        className="hidden" // Hide native radio button
                                     />
-                                    <span className="font-semibold text-slate-800 dark:text-gray-200">Delivery (+€{DELIVERY_FEE.toFixed(2)} Fee)</span>
+                                    <div className="flex items-center">
+                                        {/* Custom Circular Radio Indicator */}
+                                        <div className={`w-6 h-6 rounded-full border-2 mr-4 flex items-center justify-center flex-shrink-0 transition duration-300
+                                            ${customerDetails.deliveryType === 'delivery'
+                                                ? 'border-amber-600 bg-amber-600 shadow-md'
+                                                : 'border-gray-400 dark:border-gray-500 bg-white dark:bg-gray-700'
+                                            }`}
+                                        >
+                                            {customerDetails.deliveryType === 'delivery' && (
+                                                <span className="w-2.5 h-2.5 rounded-full bg-white dark:bg-gray-900"></span>
+                                            )}
+                                        </div>
+                                        <span className="font-extrabold text-lg text-gray-800 dark:text-gray-100">
+                                            Delivery <span className="text-sm font-normal text-amber-600 dark:text-amber-400">(+€{DELIVERY_FEE.toFixed(2)} Fee)</span>
+                                        </span>
+                                    </div>
                                 </label>
                             </div>
                         </div>
 
-                        {/* Address Field (Conditional) */}
+                        {/* Address Field (Conditional) - Using a placeholder for the motion component */}
                         {customerDetails.deliveryType === 'delivery' && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.3 }}
+                            <div
                                 className="overflow-hidden space-y-2"
                             >
-                                <label htmlFor="address" className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Delivery Address </label>
+                                <label htmlFor="address" className="block text-sm font-bold uppercase text-amber-600 dark:text-amber-400 mb-2 tracking-wider">Delivery Address *</label>
                                 <div className="relative">
                                     <input
                                         id="address"
@@ -544,17 +592,19 @@ const StandaloneCheckout = ({ dbInstance, userId, initialCart, onOrderSuccess, s
                                         onChange={handleChange}
                                         required
                                         placeholder="Street address, City, Postal Code"
-                                        className={`w-full p-3 border rounded-lg transition dark:bg-slate-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 ${errors.address ? 'border-red-500' : 'border-gray-300 dark:border-slate-700'}`}
+                                        className={`w-full p-4 pl-12 border rounded-xl transition duration-300 shadow-sm dark:bg-gray-800 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-4 focus:ring-amber-200/50 focus:border-amber-500 text-lg
+                                            ${errors.address ? 'border-red-500 ring-red-200' : 'border-gray-300 dark:border-gray-700'}`}
                                     />
-                                    <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                                    {/* Using MapPin from lucide-react */}
+                                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-500 dark:text-amber-400" />
                                 </div>
-                                {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
-                            </motion.div>
+                                {errors.address && <p className="text-red-500 text-sm mt-2">{errors.address}</p>}
+                            </div>
                         )}
 
                         {/* Special Notes */}
                         <div className="space-y-2">
-                            <label htmlFor="notes" className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Special Instructions / Notes (Optional)</label>
+                            <label htmlFor="notes" className="block text-sm font-bold uppercase text-amber-600 dark:text-amber-400 mb-2 tracking-wider">Special Instructions / Notes (Optional)</label>
                             <div className="relative">
                                 <textarea
                                     id="notes"
@@ -563,9 +613,11 @@ const StandaloneCheckout = ({ dbInstance, userId, initialCart, onOrderSuccess, s
                                     value={customerDetails.notes}
                                     onChange={handleChange}
                                     placeholder="e.g., allergies, gate code, leave at door"
-                                    className="w-full p-3 pl-10 border border-gray-300 dark:border-slate-700 rounded-lg transition focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-slate-900 dark:text-white resize-none"
+                                    // Using pl-12 to clear the space for the icon
+                                    className="w-full p-4 pl-12 border rounded-xl transition duration-300 shadow-sm dark:bg-gray-800 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-4 focus:ring-amber-200/50 focus:border-amber-500 text-lg resize-none"
                                 ></textarea>
-                                <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                                {/* FIX: Using 'MessageSquare' from lucide-react instead of the undefined component */}
+                                <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-amber-500 dark:text-amber-400" />
                             </div>
                         </div>
 
