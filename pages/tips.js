@@ -165,25 +165,34 @@ const VideoHeroSection = () => (
         {/* BRIGHTNESS CHANGE: Made the overlay slightly lighter by adjusting the 'to' color from black/30 to black/20 and dark:to-gray-950/40 to dark:to-gray-950/30 */}
         <div className="absolute inset-0 bg-gradient-to-tr from-black/80 to-black/20 dark:from-gray-950/90 dark:to-gray-950/30"></div>
         
-        {/* Content Container - Use fixed padding and auto margins to center content correctly */}
-        <div className="relative z-10 p-8 sm:p-12 lg:p-20 max-w-7xl h-full flex flex-col justify-center mx-auto"> 
-            <span className="text-xl font-bold uppercase text-amber-300 tracking-[0.4em] mb-4 flex items-center">
-                <PlayCircle className='w-6 h-6 mr-3' /> KITCHEN MASTERY
-            </span>
-            <h1 className="text-5xl sm:text-7xl font-black text-white font-serif mb-8 leading-tight drop-shadow-lg">
-                Cook with Confidence. Cook with Knowledge.
-            </h1>
-            <p className="text-xl sm:text-2xl text-gray-100 mb-12 max-w-lg drop-shadow-md">
-                Stop guessing and start creating. Our comprehensive library breaks down advanced techniques into simple, repeatable steps.
-            </p>
+        {/* Content Container */}
+        <div className="relative z-10 px-6 sm:px-10 lg:px-20 py-16 sm:py-24 max-w-7xl mx-auto flex flex-col justify-center items-start text-left h-full">
+        {/* Tagline */}
+        <span className="flex items-center text-base sm:text-lg font-semibold uppercase text-amber-300 tracking-[0.35em] mb-4 sm:mb-6">
+            <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-3" />
+            KITCHEN MASTERY
+        </span>
 
-            <Link
-                href="#categories"
-                className="self-start inline-flex items-center px-10 py-4 text-xl font-extrabold bg-amber-500 text-gray-900 rounded-full shadow-2xl transition duration-300 hover:bg-amber-400 transform hover:scale-[1.03] active:scale-[0.98] ring-4 ring-amber-300/50"
-            >
-                <BookOpen className="w-6 h-6 mr-3" /> Explore the Library
-            </Link>
+        {/* Headline */}
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-serif text-white drop-shadow-2xl leading-tight max-w-3xl">
+            Cook with Confidence. Cook with Knowledge.
+        </h1>
+
+        {/* Description */}
+        <p className="text-base sm:text-lg lg:text-xl text-gray-300 mt-4 sm:mt-6 font-light italic border-l-4 border-amber-500 pl-4 max-w-2xl">
+            Stop guessing and start creating. Our comprehensive library breaks down advanced techniques into simple, repeatable steps.
+        </p>
+
+        {/* Call to Action */}
+        <Link
+            href="#categories"
+            className="mt-8 inline-flex items-center px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-xl font-extrabold bg-amber-500 text-gray-900 rounded-full shadow-2xl transition-all duration-300 hover:bg-amber-400 transform hover:scale-[1.03] active:scale-[0.98] ring-4 ring-amber-300/40"
+        >
+            <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 mr-3" />
+            Explore the Library
+        </Link>
         </div>
+
     </section>
 );
 
@@ -233,7 +242,7 @@ const TechniqueCard = ({ category }) => {
                     {/* Footer / CTA */}
                     <div className="flex justify-between items-center w-full pt-3 border-t border-gray-100 dark:border-gray-700 mt-auto">
                         <span className="text-sm font-semibold text-gray-600 dark:text-gray-300 flex items-center">
-                            <Layers className="w-4 h-4 mr-1 text-red-500" /> {category.count} Articles
+                            <Layers className="w-4 h-4 mr-1 text-red-500" /> Insights
                         </span>
                         <span className="text-red-600 font-bold flex items-center transition-transform group-hover:translate-x-1">
                             Start Module <ChevronRight className="w-4 h-4 ml-1" />
