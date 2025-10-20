@@ -13,23 +13,23 @@ import {
 // --- Data Definitions ---
 // (Kept local for standalone file; ideally moved to lib/constants.js)
 const featuredRecipes = [
-    { slug: 'recipe-1', title: 'Summer Salad with Vinaigrette', excerpt: 'Light and refreshing seasonal greens with a zesty lemon dressing.', image: 'images/white.png', prepTime: '15 min' },
-    { slug: 'recipe-2', title: 'Spicy Chicken Stir Fry', excerpt: 'Quick weeknight meal with bold Asian flavors and plenty of veggies.', image: 'images/fry.webp', prepTime: '20 min' },
-    { slug: 'recipe-3', title: 'Rich Chocolate Fudge Cake', excerpt: 'Rich and decadent dessert perfect for any special occasion or craving.', image: 'images/choco.webp', prepTime: '45 min' },
-    { slug: 'recipe-4', title: 'Artisan Veggie Pizza', excerpt: 'Homemade whole-wheat dough topped with fresh seasonal garden vegetables.', image: 'images/pizza.jpg', prepTime: '1 hour' },
+    { slug: 'vanilla-cupcakes', title: 'Vanilla Cupcakes', excerpt: 'Light, airy vanilla sponge topped with fluffy buttercream. A foolproof basic.', image: 'images/cup.jpg', prepTime: '15 min' },
+    { slug: 'yogurt-parfait', title: 'Yogurt Parfait', excerpt: 'Layers of Greek yogurt, berries, and crunchy granola. Quick and nutritious.', image: 'images/parf.jpg', prepTime: '20 min' },
+    { slug: 'chocolate-cake', title: 'Rich Chocolate Fudge Cake', excerpt: 'Rich and decadent dessert perfect for any special occasion or craving.', image: 'images/cake.jpg', prepTime: '45 min' },
+    { slug: 'gizzdodo', title: 'Spicy Gizzdodo', excerpt: 'A fantastic mix of fried gizzard and sweet plantain pieces tossed in pepper sauce.', image: 'images/gizz.jpg', prepTime: '1 hour' },
 ]
 
 const inspirationSections = [
-    { title: 'Quick Meals', description: 'Under 30 minutes', image: 'images/food.webp', slug: 'quick-meals' },
-    { title: 'Holiday Baking', description: 'Seasonal treats and festive desserts', image: 'images/bites.webp', slug: 'holiday-baking' },
-    { title: 'Vegan Favorites', description: 'Plant-based deliciousness for everyone', image: 'images/vegan.webp', slug: 'vegan-favorites' },
+    { title: 'Quick Meals', description: 'Under 30 minutes', image: 'images/food.webp', slug: 'meal' },
+    { title: 'Baking & Sweets', description: 'Seasonal treats and festive desserts', image: 'images/bites.webp', slug: 'baking' },
+    { title: 'Recipes', description: 'A collection of our favorite recipes', image: 'images/new.png', slug: 'vegan-favorites' },
 ]
 
 const recipeOfTheWeek = {
-    title: 'Rustic Sourdough Loaf (The Ultimate Guide)',
+    title: 'Rustic Loaf (The Ultimate Guide)',
     description: "Achieve the perfect rise and tang with Wendy's fail-proof, step-by-step sourdough recipe. Perfect for beginners and advanced bakers alike!",
     image: 'images/loaf.webp',
-    slug: 'rustic-sourdough-loaf',
+    slug: 'sourdough-bread',
     prepTime: '30 min',
     cookTime: '4 hours (rest time)',
 }
@@ -132,7 +132,7 @@ const HomePage = () => {
             >
                 <div
                     className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: "url('/images/wendy.png')" }}
+                    style={{ backgroundImage: "url('/images/ff.webp')" }}
                     role="img" // ARIA role for background image
                     aria-label="Image of a delicious meal spread on a wooden table"
                 >
@@ -273,7 +273,7 @@ const HomePage = () => {
                 <div className="max-w-4xl mx-auto px-6 flex flex-col md:flex-row items-center gap-8">
                     <img
                         loading="lazy"
-                        src="/images/kenny.jpg"
+                        src="/images/cool.jpg"
                         alt="Wendy, the author, smiling in her kitchen" 
                         className="w-40 h-40 sm:w-48 sm:h-48 rounded-full object-cover border-4 border-amber-500 shadow-2xl"
                     />

@@ -563,13 +563,13 @@ const App = () => {
                 <div className="absolute inset-0 bg-slate-800/50 backdrop-blur-[1px]"></div>
 
                 <div className="relative z-20 max-w-7xl mx-auto h-full flex flex-col justify-center p-6 sm:p-10">
-                                    <h1 className="text-4xl sm:text-6xl font-extrabold font-serif text-white drop-shadow-2xl tracking-tight">
-                                        Artisan Sweets & Provisions
-                                    </h1>
-                                    <p className="text-xl text-gray-300 mt-2 font-light italic border-l-4 border-amber-500 pl-4">
-                                        Hand-crafted daily with the finest, all-natural ingredients.
-                                    </p>
-                                </div>
+                    <h1 className="text-4xl sm:text-6xl font-extrabold font-serif text-white drop-shadow-2xl tracking-tight">
+                        Artisan Sweets & Provisions
+                    </h1>
+                    <p className="text-xl text-gray-300 mt-2 font-light italic border-l-4 border-amber-500 pl-4">
+                        Hand-crafted daily with the finest, all-natural ingredients.
+                    </p>
+                </div>
             </header>
 
             {/* Main Content & Menu Grid */}

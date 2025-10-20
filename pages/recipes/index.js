@@ -481,7 +481,7 @@ const RecipesPage = () => {
                         View our top-rated, trending recipes this week. You might just find your new favorite.
                     </p>
                     <Link
-                        href="/popular"
+                        href="/meal"
                         className="inline-block px-10 py-4 text-xl font-bold bg-amber-600 text-white rounded-full shadow-2xl transition duration-300 hover:bg-amber-700 transform hover:-translate-y-1 tracking-wider ring-4 ring-amber-600/50"
                     >
                         View Popular Dishes <span className="ml-1">→</span>

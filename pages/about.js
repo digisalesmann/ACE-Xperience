@@ -29,7 +29,6 @@ const brandPillars = [
 
 const mediaWallItems = [
     // --- VIDEOS (3) ---
-    { type: 'video', src: 'videos/burger.mp4', alt: 'A quick cooking montage.', span: 'lg:col-span-2 lg:row-span-2', ratio: 'h-96' },
     { type: 'video', src: 'videos/food.mp4', alt: 'Close-up of chef dicing.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'video', src: 'videos/kitchen.mp4', alt: 'Bread rising time-lapse.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'video', src: 'videos/fufu.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
