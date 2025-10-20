@@ -33,17 +33,64 @@ const mediaWallItems = [
     { type: 'video', src: 'videos/food.mp4', alt: 'Close-up of chef dicing.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'video', src: 'videos/kitchen.mp4', alt: 'Bread rising time-lapse.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'video', src: 'videos/fufu.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vid1.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vid2.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vid3.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vid4.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vid5.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vid6.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vid7.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vid8.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vid9.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vo1.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-2 lg:row-span-2', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vo2.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vo3.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vo4.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vo5.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vo6.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vo7.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vo8.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vo9.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vo10.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vo11.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vo12.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vo13.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'video', src: 'videos/vo14.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
+    { type: 'video', src: 'videos/vo15.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     // --- IMAGES (10) ---
     { type: 'image', src: 'https://i.pinimg.com/1200x/21/72/f0/2172f0a44176e49820617bebfd4f9f00.jpg', alt: 'Perfectly proofed artisan bread dough.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'image', src: 'https://i.pinimg.com/1200x/60/2d/7f/602d7f10c52ac1ed9dd7563a526fe719.jpg', alt: 'Colorful array of kitchen spices in jars.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'image', src: 'https://i.pinimg.com/736x/23/66/72/23667274f808e96201af6c92a610a055.jpg', alt: 'Two pairs of hands preparing dough together.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
-    { type: 'image', src: 'https://i.pinimg.com/736x/ab/57/d7/ab57d70dc343f1238d2419404b048fe3.jpg', alt: 'A sophisticated dish presentation with edible flowers.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'image', src: 'https://i.pinimg.com/736x/fd/5e/bc/fd5ebcdcb2b9ec8b079700ca4e7ed191.jpg', alt: 'Close-up of whisking eggs for pastry.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'image', src: 'https://i.pinimg.com/1200x/cc/82/42/cc82428b40b0511291045ead9d7c84eb.jpg', alt: 'A rich sauce simmering on the stove.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
-    { type: 'image', src: 'https://i.pinimg.com/1200x/0d/ed/14/0ded1426dfbc2b6f9a0a74c104a7b149.jpg', alt: 'Vibrant fresh garden vegetables.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'image', src: 'https://i.pinimg.com/736x/39/59/e9/3959e9506009a83f579bc7c113f6acc0.jpg', alt: 'Hand pouring olive oil into a pan.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'image', src: 'https://i.pinimg.com/1200x/01/38/37/01383771e21d5c68932f410ee98608e2.jpg', alt: 'Measuring precise amounts of flour.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'image', src: 'https://i.pinimg.com/1200x/48/c4/48/48c44829c407cb6880aaa22c7acf1e8b.jpg', alt: 'Fresh cookies cooling on a wire rack.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/pic1.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po1.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po2.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po3.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po4.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po5.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po6.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po7.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po8.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po9.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po10.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po11.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po12.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po13.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po14.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po15.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po16.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po17.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po18.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po19.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po20.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po21.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po22.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
+    { type: 'image', src: '/images/po23.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-94' },
+    { type: 'image', src: '/images/po24.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
 ].sort(() => Math.random() - 0.5); 
 
 // --- MEDIA WALL COMPONENT (Updated to use <video> for local files) ---
@@ -126,8 +173,12 @@ const AboutPage = () => {
 
                     {/* Animated Intro Text (3/5 width) */}
                     <div className="lg:col-span-3 space-y-6">
-                        <p className="text-xl font-semibold uppercase text-red-600 dark:text-red-400 tracking-[0.3em] mb-2 flex items-center animate-stagger-reveal" style={{ animationDelay: '00.3s' }}>
-                            <Handshake className="w-6 h-6 mr-3" /> A Warm Welcome From Me
+                        <p className="text-xl font-semibold uppercase text-red-600 dark:text-red-400 tracking-[0.3em] mb-2 animate-stagger-reveal" style={{ animationDelay: '00.3s' }}>
+                            
+                            <span className="flex items-start">
+                                <Handshake className="w-6 h-6 mr-3 flex-shrink-0" /> 
+                                <span className="block">A WARM WELCOME FROM ME</span>
+                            </span>
                         </p>
                         <h1 className="text-5xl sm:text-7xl font-black text-gray-900 dark:text-white font-serif leading-tight animate-stagger-reveal" style={{ animationDelay: '0.5s' }}>
                             Hi, I'm Wendy. <br className='hidden sm:inline'/> Let's Cook Together.
@@ -233,23 +284,21 @@ const AboutPage = () => {
                 </section>
 
 
-                {/* 5. JOIN THE JOURNEY / FINAL CTA (Color Fix Applied) */}
-                <section className="bg-amber-600 dark:bg-amber-900 p-10 sm:p-16 rounded-3xl shadow-4xl text-center">
-                    <h2 className="text-4xl font-extrabold font-serif text-white mb-4">
-                        Ready to Start Whisking Up Joy?
-                    </h2>
-                    <p className="text-xl text-amber-100 dark:text-amber-200 mb-8 max-w-2xl mx-auto">
-                        Join our growing community of flavor explorers. Try a new recipe, share your kitchen story, or subscribe for weekly inspiration delivered straight to your inbox.
-                    </p>
-                    <Link
-                        href="/subscribe"
-                        // Button is now bg-red-600 (Primary Red)
-                        className="inline-flex items-center justify-center px-10 py-4 text-xl font-extrabold bg-red-600 text-white rounded-full shadow-lg transition duration-300 hover:bg-red-700 transform active:scale-[0.98] ring-4 ring-white/50"
-                    >
-                        <Heart className="w-5 h-5 mr-3" /> Get Weekly Inspiration
-                    </Link>
+                {/* 5. JOIN THE JOURNEY / FINAL CTA (Responsive Fix) */}
+                <section className="bg-amber-600 dark:bg-amber-900 p-8 sm:p-14 rounded-3xl shadow-4xl text-center">
+                  <h2 className="text-2xl sm:text-4xl font-extrabold font-serif text-white mb-3 sm:mb-4">
+                    Ready to Start Whisking Up Joy?
+                  </h2>
+                  <p className="text-base sm:text-xl text-amber-100 dark:text-amber-200 mb-6 sm:mb-8 max-w-2xl mx-auto">
+                    Join our growing community of flavor explorers. Try a new recipe, share your kitchen story, or subscribe for weekly inspiration delivered straight to your inbox.
+                  </p>
+                  <Link
+                    href="/subscribe"
+                    className="inline-flex items-center justify-center px-6 sm:px-10 py-2.5 sm:py-4 text-sm sm:text-xl font-extrabold bg-red-600 text-white rounded-full shadow-lg transition duration-300 hover:bg-red-700 transform active:scale-[0.98] ring-4 ring-white/40"
+                  >
+                    <Heart className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" /> Get Weekly Inspiration
+                  </Link>
                 </section>
-
             </div>
         </div>
     );

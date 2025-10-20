@@ -16,7 +16,7 @@ try {
     AnimatePresence = fm.AnimatePresence
 } catch (err) { /* no-op */ }
 
-let Menu, X, Search, Sun, Moon, ShoppingCart, Euro, ArrowRight // FIX: Added ArrowRight
+let Menu, X, Search, Sun, Moon, ShoppingCart, Euro, ArrowRight, ArrowLeft, Mail 
 try {
     const lucide = require('lucide-react')
     Menu = lucide.Menu
@@ -26,16 +26,20 @@ try {
     Moon = lucide.Moon
     ShoppingCart = lucide.ShoppingCart 
     Euro = lucide.Euro
-    ArrowRight = lucide.ArrowRight // FIX: Added ArrowRight
+    ArrowRight = lucide.ArrowRight
+    ArrowLeft = lucide.ArrowLeft
+    Mail = lucide.Mail 
 } catch (err) {
     Menu = () => <span aria-hidden="true" className="w-6 h-6">☰</span>
     X = () => <span aria-hidden="true" className="w-6 h-6">✕</span>
     Search = () => <span aria-hidden="true" className="w-5 h-5">🔍</span>
     Sun = (props) => <span role="img" aria-label="Sun icon" className="w-5 h-5" {...props}>☀️</span>
     Moon = (props) => <span role="img" aria-label="Moon icon" className="w-5 h-5" {...props}>🌙</span>
-    ShoppingCart = () => <span aria-hidden="true" className="w-5 h-5">🛒</span> // FIX: Added ShoppingCart Fallback
-    Euro = () => <span aria-hidden="true" className="w-4 h-4">€</span>           // FIX: Added Euro Fallback
+    ShoppingCart = () => <span aria-hidden="true" className="w-5 h-5">🛒</span> 
+    Euro = () => <span aria-hidden="true" className="w-4 h-4">€</span> 
     ArrowRight = () => <span aria-hidden="true" className="w-5 h-5">→</span>
+    ArrowLeft = () => <span aria-hidden="true" className="w-5 h-5">←</span>
+    Mail = () => <span aria-hidden="true" className="w-5 h-5">✉️</span> 
 }
 
 
@@ -72,7 +76,7 @@ const useDarkMode = () => {
     return { darkMode, mounted, toggleTheme };
 };
 
-// --- Cart Persistence Hook ---
+// --- Cart Persistence Hook (Kept for external Cart Icon) ---
 const useCartCount = () => {
     const [count, setCount] = useState(0);
 
@@ -113,13 +117,15 @@ const useCartCount = () => {
     return count;
 };
 
-// --- NAV LINKS ---
+// --- NAV LINKS (Updated: Contact removed from main array) ---
+// The desktop nav Contact link is styled separately as a button via its 'isPrimary' flag
 const navLinks = [
     { title: 'Recipes', path: '/recipes' },
     { title: 'Baking & Sweets', path: '/baking' },
     { title: 'Quick Meals', path: '/meal' },
     { title: 'Tips & Techniques', path: '/tips' },
     { title: 'About Wendy', path: '/about' },
+    // Removed: { title: 'Contact', path: '/contact', isPrimary: true }, 
 ];
 
 // --- CHECKOUT LINK COMPONENT (Cart Icon) ---
@@ -128,7 +134,7 @@ const CheckoutLink = ({ cartCount, onClick }) => {
         <Link 
             href="/checkout" 
             className="relative text-gray-700 dark:text-gray-200 hover:text-amber-500 transition 
-                       focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-full p-2"
+                        focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-full p-2"
             onClick={onClick}
             aria-label={`View Cart (${cartCount} items)`}
         >
@@ -151,12 +157,10 @@ export default function Navbar() {
     const { darkMode, mounted, toggleTheme } = useDarkMode(); 
     const cartCount = useCartCount(); // Get persistent cart count
 
-    // ENHANCEMENT: Memoized toggle function for better performance and scroll lock
     const toggleMenu = useCallback(() => {
         setMenuOpen((prev) => {
             const newState = !prev;
             if (typeof document !== 'undefined') {
-                // Ensure scroll lock/unlock happens smoothly
                 document.body.style.overflow = newState ? 'hidden' : 'unset'; 
             }
             return newState;
@@ -173,7 +177,7 @@ export default function Navbar() {
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
                     <h1 className="text-3xl font-extrabold font-serif tracking-tight text-gray-900 dark:text-white">
-                        AceX
+                        Ace Xperience
                     </h1>
                 </div>
             </nav>
@@ -202,6 +206,7 @@ export default function Navbar() {
 
                 {/* Desktop Nav */}
                 <ul className="hidden md:flex items-center space-x-8" role="menubar">
+                    {/* Render standard links */}
                     {navLinks.map((link) => (
                         <li key={link.title} role="none">
                             <Link
@@ -217,22 +222,23 @@ export default function Navbar() {
                         </li>
                     ))}
                     
-                    {/* NEW: Desktop Checkout Icon */}
+                    {/* Desktop Contact Link (Styled as a Button) */}
+                    <li role="none">
+                        <Link
+                            href="/contact"
+                            role="menuitem"
+                            className="px-4 py-2 text-white bg-red-600 rounded-full font-bold transition duration-200 hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 shadow-md"
+                        >
+                            Contact
+                        </Link>
+                    </li>
                 </ul>
 
-                <div className="flex items-center space-x-4"> {/* FIX: Removed unnecessary space-x-2 sm:space-x-4 mix */}
-                    {/* Search Button (Desktop) */}
-                    <button
-                        aria-label="Search site"
-                        className="hidden md:block text-gray-600 dark:text-gray-300 hover:text-amber-500 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-full p-2"
-                    >
-                        <Search className="w-5 h-5" />
-                    </button>
-                    
-                    {/* NEW: Universal Cart/Checkout Link (Visible on all screens) */}
+                <div className="flex items-center space-x-4">
+                    {/* Universal Cart/Checkout Link (Visible on all screens) */}
                     <CheckoutLink cartCount={cartCount} />
 
-                    {/* Dark Mode Toggle */}
+                    {/* Dark Mode Toggle (Top) */}
                     <button
                         onClick={toggleTheme}
                         className="text-gray-700 dark:text-gray-200 hover:text-amber-500 transition p-2 rounded-full border border-transparent hover:border-amber-500/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
@@ -277,6 +283,7 @@ export default function Navbar() {
                         aria-modal="true"
                     >
                         <ul className="flex flex-col p-4 space-y-2" role="menu">
+                            {/* Mobile Links */}
                             {navLinks.map((link) => (
                                 <li key={link.title} role="none">
                                     <Link
@@ -292,32 +299,21 @@ export default function Navbar() {
                                 </li>
                             ))}
                             
-                            {/* NEW: Mobile Menu Checkout Link is now a full text link for clarity, separate from the main icon */}
+                            {/* Mobile Menu Contact Link (Styled as Primary - Red Background) */}
                             <li className="pt-3 border-t border-gray-200 dark:border-gray-800 mt-2" role="none">
                                 <Link
-                                    href="/StandaloneCheckout.jsx"
+                                    href="/contact" 
                                     role="menuitem"
                                     className="p-3 rounded-lg text-lg font-medium 
-                                    bg-amber-100 text-amber-800 dark:bg-gray-800 dark:text-amber-400 
-                                    hover:bg-amber-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 flex items-center justify-between"
+                                    bg-red-100 text-red-800 dark:bg-gray-800 dark:text-red-400 
+                                    hover:bg-red-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 flex items-center justify-between"
                                     onClick={toggleMenu}
                                 >
-                                    <span>View Cart ({cartCount})</span>
-                                    <ArrowRight size={20} />
+                                    <span>Contact Us</span>
+                                    <Mail size={20} />
                                 </Link>
                             </li>
-
-                            {/* Theme Toggle in Mobile Menu */}
-                            <li className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-3 mt-2" role="none">
-                                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">Toggle Theme</span>
-                                <button 
-                                    onClick={toggleTheme} 
-                                    className="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
-                                    aria-label="Toggle dark mode"
-                                >
-                                    {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-                                </button>
-                            </li>
+                            
                         </ul>
                     </motion.div>
                 )}
