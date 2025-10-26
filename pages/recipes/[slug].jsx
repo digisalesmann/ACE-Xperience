@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { useRouter } from 'next/router' 
 import { motion } from 'framer-motion'
 import { 
-    Utensils, Clock, ChefHat, Star, Timer, TrendingUp,
+    Utensils, ChefHat, Star, TrendingUp, Users,
     CheckCircle, ListOrdered, Lightbulb, Soup 
 } from 'lucide-react' 
 
@@ -11,11 +11,11 @@ import {
 import { allRecipes } from '../../lib/data' 
 
 // -------------------------------------------------------------------
-// --- Helper Components (CleanTag is now ItalicTag) ---
+// --- Helper Components ---
 // -------------------------------------------------------------------
 
 /**
- * MetricTag: Cleaner card design for the key metrics bar. (UNCHANGED)
+ * MetricTag: Cleaner card design for the key metrics bar.
  */
 const MetricTag = ({ Icon, label, value, color }) => (
     <div className="flex flex-col items-start p-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 w-full flex-1 min-w-[120px] transition duration-300 hover:shadow-md">
@@ -29,7 +29,7 @@ const MetricTag = ({ Icon, label, value, color }) => (
 
 /**
  * ItalicTag: Displays a non-metric tag as simple, italic, underlined text 
- * for a clean, typographic look in the hero section. (UPDATED)
+ * for a clean, typographic look in the hero section.
  */
 const ItalicTag = ({ label }) => (
     <span className="inline-block text-base font-light italic text-gray-300 dark:text-gray-400 mr-4 border-b border-gray-500/50 hover:text-white transition duration-150 cursor-pointer">
@@ -38,7 +38,7 @@ const ItalicTag = ({ label }) => (
 )
 
 /**
- * FullRecipeContent: Dynamic content with ingredients/instructions. (UNCHANGED)
+ * FullRecipeContent: Dynamic content with ingredients/instructions.
  */
 const FullRecipeContent = ({ recipe }) => {
     
@@ -185,7 +185,7 @@ const RecipeSlugPage = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-950/40 to-transparent"></div>
                 
-                {/* Hero Content - LIFTED TO AVOID METRIC BAR OVERLAP */}
+                {/* Hero Content */}
                 <div className="absolute bottom-16 sm:bottom-20 left-0 right-0 p-6 sm:p-12 max-w-7xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
@@ -198,7 +198,7 @@ const RecipeSlugPage = () => {
                         </h1>
                         <p className="text-xl text-gray-300 mt-4 max-w-3xl italic font-light hidden sm:block">{recipe.excerpt}</p>
                         
-                        {/* Rating and Tags underneath title - NOW USING ItalicTag */}
+                        {/* Rating and Tags underneath title */}
                         <div className="flex flex-wrap items-center mt-6">
                             <div className="flex items-center space-x-1 mr-6">
                                 {starDisplay}
@@ -206,7 +206,6 @@ const RecipeSlugPage = () => {
                                 <span className="text-gray-400">(45 reviews)</span>
                             </div>
                             <div className="flex flex-wrap items-center">
-                                {/* Renamed from CleanTag to ItalicTag, added space-x-4 container to ItalicTag itself */}
                                 {recipe.tags.map(tag => <ItalicTag key={tag} label={tag} />)}
                             </div>
                         </div>
@@ -214,20 +213,20 @@ const RecipeSlugPage = () => {
                 </div>
             </div>
 
-            {/* 2. MAIN CONTENT AREA - Reduced negative margin */}
+            {/* 2. MAIN CONTENT AREA */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20 pb-20">
                 
-                {/* Metrics Bar (Compact, Card Style) */}
+                {/* Metrics Bar (Compact, Card Style) - NO TIMERS */}
                 <motion.div 
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                     className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 p-4 sm:p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-800"
                 >
-                    <MetricTag Icon={Timer} label="Prep Time" value={recipe.prepTime} color="text-amber-600" />
-                    <MetricTag Icon={Clock} label="Cook Time" value={recipe.cookTime} color="text-amber-600" />
-                    <MetricTag Icon={TrendingUp} label="Difficulty" value={recipe.difficulty} color={difficultyColor} />
                     <MetricTag Icon={Soup} label="Category" value={recipe.category} color="text-blue-500" />
+                    <MetricTag Icon={TrendingUp} label="Difficulty" value={recipe.difficulty} color={difficultyColor} />
+                    <MetricTag Icon={Users} label="Servings" value={recipe.servings || "4-6"} color="text-purple-500" />
+                    <MetricTag Icon={ChefHat} label="Skill Level" value={recipe.difficulty} color="text-amber-600" />
                 </motion.div>
 
                 {/* Detailed Recipe Content */}

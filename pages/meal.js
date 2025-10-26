@@ -12,30 +12,25 @@ const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? initialAuthToken : null;
 
-// --- CONSTANTS ---
 const LIGHT_BG_COLOR = '#FBF5E5';
-const HERO_IMAGE_URL = 'images/health.png';
+const HERO_IMAGE_URL = 'images/heroo.png';
 
-const PERSISTENCE_KEY = 'siteCart'; // Key for localStorage persistence
+const PERSISTENCE_KEY = 'siteCart';
 
 const MENU_ITEMS = [
-    { id: 'jollof-rice', name: 'Smoky Jollof Rice', price: 15.00, desc: 'Classic party rice dish cooked in a spicy tomato and pepper base. Served plain.', size: 'Bowl', icon: 'Drumstick', image: 'images/smoky.jpg', category: 'Nigerian Staples' },
+    { id: 'jollof-rice', name: 'Smoky Jollof Rice', price: 15.00, desc: 'Classic party rice dish cooked in a spicy tomato and pepper base. Served plain.', size: 'Bowl', icon: 'Drumstick', image: 'images/coco.jpg', category: 'Nigerian Staples' },
     { id: 'fried-rice', name: 'Premium Fried Rice', price: 16.50, desc: 'Wok-fried rice mixed with finely chopped liver, shrimp, and diced vegetables.', size: 'Bowl', icon: 'Drumstick', image: 'images/fri.jpg', category: 'Nigerian Staples' },
-    { id: 'white-rice-stew', name: 'White Rice & Rich Stew', price: 14.00, desc: 'Fluffy white rice served with a robust, slow-simmered tomato and pepper beef stew.', size: 'Plate', icon: 'Drumstick', image: 'images/stew.jpg', category: 'Nigerian Staples' },
-    { id: 'beans-plantain', name: 'Ewa Agoyin & Dodo', price: 13.50, desc: 'Mashed, spicy soft beans (Ewa Agoyin) served with fried ripe plantain (Dodo).', size: 'Plate', icon: 'Utensils', image: 'images/ewa.jpg', category: 'Nigerian Staples' },
-    { id: 'coconut-rice', name: 'Coconut Jollof Rice', price: 17.00, desc: 'Fragrant basmati rice cooked in creamy coconut milk and subtle spices.', size: 'Bowl', icon: 'Utensils', image: 'images/coco.jpg', category: 'Nigerian Staples' },
-    { id: 'asun-jollof', name: 'Asun Fried Combo', price: 22.00, desc: 'Smoky Jollof rice served with spicy roasted goat meat (Asun).', size: 'Plate', icon: 'Star', image: 'images/asunn.jpg', category: 'Nigerian Staples' },
+    { id: 'white-rice-stew', name: 'White Rice & Rich Stew', price: 14.00, desc: 'Fluffy white rice served with a robust, slow-simmered tomato and pepper beef stew.', size: 'Plate', icon: 'Drumstick', image: 'images/rns.jpg', category: 'Nigerian Staples' },
+    { id: 'coconut-rice', name: 'Coconut Jollof Rice', price: 17.00, desc: 'Fragrant basmati rice cooked in creamy coconut milk and subtle spices.', size: 'Bowl', icon: 'Utensils', image: 'images/cj.jpg', category: 'Nigerian Staples' },
     
     { id: 'egusi-pounded', name: 'Egusi Soup & Pounded Yam', price: 24.00, desc: 'Melon seed soup (Egusi) with spinach, meat, and smoked fish, served with pounded yam.', size: 'Set', icon: 'Soup', image: 'images/pound.jpg', category: 'Soups & Swallows' },
     { id: 'afang-soup', name: 'Afang Soup & Garri', price: 26.00, desc: 'A rich Efik/Ibibio soup made with Afang leaves and waterleaf, served with Garri.', size: 'Set', icon: 'Soup', image: 'images/afang.jpg', category: 'Soups & Swallows' },
-    { id: 'ogbono-soup', name: 'Ogbono Soup & Amala', price: 24.50, desc: 'Slender, drawing soup made from ogbono seeds, served with Amala (Yam Flour).', size: 'Set', icon: 'Soup', image: 'images/ogbo.jpg', category: 'Soups & Swallows' },
-    { id: 'seafood-okro', name: 'Seafood Okro Soup', price: 27.00, desc: 'Fresh okro soup loaded with prawns, calamari, and smoked catfish.', size: 'Bowl', icon: 'Soup', image: 'images/okro.jpg', category: 'Soups & Swallows' },
-    { id: 'edikang-ikong', name: 'Edikang Ikong & Fufu', price: 25.50, desc: 'Vegetable soup (Waterleaf & Ugu) richly prepared, served with Cassava Fufu.', size: 'Set', icon: 'Soup', image: 'https://i.pinimg.com/736x/e2/6f/92/e26f921977e1636c4f3cda56b276c789.jpg', category: 'Soups & Swallows' },
-    { id: 'ewedu-gbegiri', name: 'Ewedu & Gbegiri', price: 23.00, desc: 'Classic Yoruba combo of Jute leaf soup (Ewedu) and blended beans soup (Gbegiri).', size: 'Set', icon: 'Soup', image: 'https://i.pinimg.com/736x/2e/b7/09/2eb709b27d19bd840aa61b5c0ea6d583.jpg', category: 'Soups & Swallows' },
+    { id: 'ogbono-soup', name: 'Ogbono Soup & Amala', price: 24.50, desc: 'Slender, drawing soup made from ogbono seeds, served with Amala (Yam Flour).', size: 'Set', icon: 'Soup', image: 'images/ogb.jpg', category: 'Soups & Swallows' },
+    { id: 'seafood-okro', name: 'Okro Soup', price: 27.00, desc: 'Fresh okro soup loaded with prawns, calamari, and smoked catfish.', size: 'Bowl', icon: 'Soup', image: 'images/okro.jpg', category: 'Soups & Swallows' },
 
-    { id: 'meat-pie-ng', name: 'Gourmet Meat Pie', price: 6.00, desc: 'Flaky pastry filled with seasoned minced beef, carrots, and potatoes.', size: 'Single', icon: 'Package', image: 'https://i.pinimg.com/1200x/d1/66/00/d16600f2a328617ae97953cc22905529.jpg', category: 'Short Eats' },
-    { id: 'chicken-pie-ng', name: 'Savory Chicken Pie', price: 6.50, desc: 'Rich chicken, vegetables, and creamy sauce filling in a buttery crust.', size: 'Single', icon: 'Package', image: 'https://i.pinimg.com/1200x/a4/08/23/a40823f1ea7e1ad3e2fa0a139477dbcb.jpg', category: 'Short Eats' },
-    { id: 'sausage-roll-ng', name: 'Puff Sausage Roll', price: 4.50, desc: 'Seasoned sausage wrapped in light, layered puff puff pastry.', size: 'Single', icon: 'Package', image: 'https://i.pinimg.com/1200x/7f/13/b0/7f13b0698aaef23f6d57d3b37190e7ef.jpg', category: 'Short Eats' },
+    { id: 'meat-pie-ng', name: 'Meat Pie', price: 6.00, desc: 'Flaky pastry filled with seasoned minced beef, carrots, and potatoes.', size: 'Single', icon: 'Package', image: 'images/meatt.jpg', category: 'Short Eats' },
+    { id: 'chicken-pie-ng', name: 'Chicken Pie', price: 6.50, desc: 'Rich chicken, vegetables, and creamy sauce filling in a buttery crust.', size: 'Single', icon: 'Package', image: 'images/chick.jpg', category: 'Short Eats' },
+    { id: 'sausage-roll-ng', name: 'Puff Sausage Roll', price: 4.50, desc: 'Seasoned sausage wrapped in light, layered puff puff pastry.', size: 'Single', icon: 'Package', image: 'images/po24.jpg', category: 'Short Eats' },
     { id: 'egg-roll-ng', name: 'Nigerian Egg Roll', price: 4.00, desc: 'Hard-boiled egg wrapped in slightly sweet, thick dough and deep-fried.', size: 'Single', icon: 'Utensils', image: 'https://i.pinimg.com/736x/d7/c1/b1/d7c1b148ce1f86342266d48f3fc53a49.jpg', category: 'Short Eats' },
     { id: 'puff-puff-ng', name: 'Puff Puff (Sweet Dough Balls)', price: 3.50, desc: '6 pieces of soft, spongy, deep-fried sweet dough.', size: '6 Pcs', icon: 'Utensils', image: 'https://i.pinimg.com/736x/5a/68/45/5a68454beba5ac245c8beecfdf393611.jpg', category: 'Short Eats' },
     { id: 'moi-moi-ng', name: 'Moi-Moi (Steamed Bean Pudding)', price: 7.00, desc: 'Steamed bean pudding blended with pepper and onion, with optional fish.', size: 'Single', icon: 'Package', image: 'https://i.pinimg.com/736x/b9/b7/84/b9b784ff09eda811125cd4f874a74b1c.jpg', category: 'Short Eats' },
@@ -43,9 +38,8 @@ const MENU_ITEMS = [
     { id: 'samosa-ng', name: 'Spicy Beef Samosa', price: 5.00, desc: 'Triangular pastry pocket filled with seasoned minced beef and peas.', size: '3 Pcs', icon: 'Utensils', image: 'https://i.pinimg.com/1200x/50/df/f3/50dff3e034ff1351e91bedfd502dde4d.jpg', category: 'Short Eats' },
     { id: 'akara-ng', name: 'Akara (Bean Fritters)', price: 4.00, desc: 'Deep-fried bean paste fritters, best served with Akamu or fresh bread.', size: '5 Pcs', icon: 'Utensils', image: 'https://i.pinimg.com/1200x/40/11/a4/4011a420bc865a5881dd7146a8c4e20d.jpg', category: 'Short Eats' },
     { id: 'fried-yam', name: 'Fried Yam & Sauce', price: 8.50, desc: 'Crispy fried yam slices served with a light pepper and onion sauce.', size: 'Plate', icon: 'Utensils', image: 'https://i.pinimg.com/736x/09/9b/36/099b36a49d219c7dfe33d93cb21785d0.jpg', category: 'Short Eats' },
-    { id: 'asun', name: 'Asun (Spicy Goat Meat)', price: 15.00, desc: 'Diced goat meat, roasted and sautéed in a fiery mix of peppers.', size: 'Small Bowl', icon: 'Star', image: 'https://i.pinimg.com/1200x/6c/91/08/6c9108c533853d39fb76656f25e33289.jpg', category: 'Short Eats' },
-    { id: 'bbq-chicken', name: 'BBQ Chicken Wings', price: 12.00, desc: '3 juicy chicken wings grilled and coated in a smoky BBQ sauce.', size: '3 Pcs', icon: 'Utensils', image: 'https://i.pinimg.com/736x/2b/1d/04/2b1d04afb108761e42798d5037472345.jpg', category: 'Short Eats' },
-    { id: 'kosai-ng', name: 'Kosai (African Doughnut)', price: 3.00, desc: 'A slightly savory, deep-fried puff similar to Ghanaian Bofrot.', size: '3 Pcs', icon: 'Utensils', image: 'https://i.pinimg.com/1200x/34/ac/2b/34ac2bf022114f8d22d7ddbd17cf0359.jpg', category: 'Short Eats' },
+    { id: 'bbq-chicken', name: 'Chicken Wings', price: 12.00, desc: '3 juicy chicken wings grilled and coated in a smoky BBQ sauce.', size: '3 Pcs', icon: 'Utensils', image: 'images/wings.png', category: 'Short Eats' },
+    { id: 'kosai-ng', name: 'Doughnuts', price: 3.00, desc: 'A slightly savory, deep-fried puff similar to Ghanaian Bofrot.', size: '3 Pcs', icon: 'Utensils', image: 'https://i.pinimg.com/1200x/34/ac/2b/34ac2bf022114f8d22d7ddbd17cf0359.jpg', category: 'Short Eats' },
 ];
 
 const CATEGORY_GROUPS = ['Nigerian Staples', 'Soups & Swallows', 'Short Eats'];
@@ -63,7 +57,6 @@ const ICON_MAP = {
     Clock: Clock, ClipboardList: ClipboardList, Check: Check, ChefHat: ChefHat, Soup: Soup, Drumstick: Drumstick
 };
 
-// --- UTILITY COMPONENT: PRODUCT CARD ---
 const ProductCard = ({ item, addToCart }) => {
     const [isAdded, setIsAdded] = useState(false);
     const IconComponent = ICON_MAP[item.icon] || Utensils;
@@ -140,14 +133,9 @@ const ProductCard = ({ item, addToCart }) => {
     );
 };
 
-// --- UTILITY COMPONENT: CART SIDEBAR ---
-
 const CartSidebar = ({ isVisible, cart, setCart, setIsCartOpen }) => { 
-    // New function defined locally to handle checkout redirection and data transfer
     const handleLocalCheckout = () => {
         if (totalItems === 0) return;
-
-        // 1. Convert cart object to a serializable array format for local storage
         const cartArray = Object.entries(cart).map(([id, item]) => ({
             id,
             name: item.name,
@@ -155,11 +143,8 @@ const CartSidebar = ({ isVisible, cart, setCart, setIsCartOpen }) => {
             quantity: item.quantity,
         }));
 
-        // 2. Save the data to local storage (the checkout page looks for this key)
         localStorage.setItem('checkoutCart', JSON.stringify(cartArray));
 
-        // 3. Redirect the user to the standalone checkout page
-        // NOTE: Path updated to the correct file path.
         window.location.href = '/checkout'; 
     };
 
@@ -207,7 +192,6 @@ const CartSidebar = ({ isVisible, cart, setCart, setIsCartOpen }) => {
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', stiffness: 200, damping: 25 }}
                     >
-                        {/* Header */}
                         <div className="p-6 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center sticky top-0 bg-white dark:bg-slate-900 z-10">
                             <h2 className="text-3xl font-serif font-bold text-slate-800 dark:text-white flex items-center">
                                 <ShoppingCart className="w-7 h-7 mr-3 text-red-800 dark:text-orange-400" /> 
@@ -222,7 +206,6 @@ const CartSidebar = ({ isVisible, cart, setCart, setIsCartOpen }) => {
                             </motion.button>
                         </div>
 
-                        {/* Cart Items */}
                         <div className="flex-grow overflow-y-auto p-6 space-y-4">
                             {cartIsEmpty ? (
                                 <div className="text-center py-16 text-gray-500 dark:text-gray-400">
@@ -263,14 +246,13 @@ const CartSidebar = ({ isVisible, cart, setCart, setIsCartOpen }) => {
                             )}
                         </div>
 
-                        {/* Footer / Checkout Button to Redirect */}
                         <div className="p-6 border-t border-gray-200 dark:border-slate-700 sticky bottom-0 bg-white dark:bg-slate-900">
                             <div className="flex justify-between text-2xl font-serif font-extrabold mb-5 text-slate-800 dark:text-white">
                                 <span>Order Total:</span>
                                 <span className="flex items-center"><Euro className="w-6 h-6 mr-1" />{subtotal.toFixed(2)}</span>
                             </div>
                             <motion.button
-                                onClick={handleLocalCheckout} // Uses the local handler for redirection
+                                onClick={handleLocalCheckout}
                                 disabled={cartIsEmpty}
                                 className={`w-full py-4 text-xl font-bold rounded-xl flex items-center justify-center transition duration-300 shadow-xl
                                     ${cartIsEmpty
@@ -290,22 +272,18 @@ const CartSidebar = ({ isVisible, cart, setCart, setIsCartOpen }) => {
     );
 };
 
-// --- UTILITY COMPONENT: MOBILE/DRAWER FILTER ---
 const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, setIsFilterDrawerOpen }) => {
     const viewCategories = ALL_CATEGORIES;
     
     const handleCategorySelect = (category) => {
-        // Correctly handle the 'All Quick Meals' mapping back to 'All Products' for filtering logic
         setSelectedCategory(category === 'All Quick Meals' ? 'All Products' : category);
         setIsFilterDrawerOpen(false);
     }
     
     const getDisplayCategory = (category) => {
-        // Ensure display logic maps back correctly
         return category === 'All Products' ? 'All Quick Meals' : category;
     }
 
-    // Determine the current selected category for styling purposes
     const effectiveSelectedCategory = getDisplayCategory(selectedCategory);
 
     return (
@@ -364,7 +342,6 @@ const MobileDrawerFilter = ({ isVisible, selectedCategory, setSelectedCategory, 
     );
 };
 
-// --- MAIN APP COMPONENT ---
 const App = () => {
     const [isAuthReady, setIsAuthReady] = useState(false);
     const [userId, setUserId] = useState(null);
@@ -375,7 +352,6 @@ const App = () => {
     const [selectedCategory, setSelectedCategory] = useState('All Products');
     const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false); 
 
-    // 1. Initialize Cart from Persistence (or default empty)
     const initialCart = useMemo(() => {
         try {
             const storedCart = localStorage.getItem(PERSISTENCE_KEY);
@@ -385,14 +361,13 @@ const App = () => {
         } catch (e) {
             console.error("Error loading cart from localStorage:", e);
         }
-        return {}; // Default to empty object if storage fails
+        return {};
     }, []);
     
     const [cart, setCart] = useState(initialCart);
 
     const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
 
-    // 2. Effect to Handle Persistence Save (Runs whenever cart state changes)
     useEffect(() => {
         try {
             localStorage.setItem(PERSISTENCE_KEY, JSON.stringify(cart));
@@ -401,8 +376,6 @@ const App = () => {
         }
     }, [cart]);
 
-
-    // 3. Firebase Initialization and Auth (Unchanged)
     useEffect(() => {
         if (!firebaseConfig.apiKey) {
             console.error("Firebase config is missing. Cannot initialize Firestore.");
@@ -460,8 +433,6 @@ const App = () => {
         });
         setStatusMessage('');
     }, []);
-    
-    // NOTE: Old handleCheckout (Firestore submit) removed. Replaced by local handler in CartSidebar.
 
     const filteredItems = useMemo(() => {
         const filterKey = selectedCategory === 'All Quick Meals' ? 'All Products' : selectedCategory;
@@ -474,7 +445,6 @@ const App = () => {
 
     const groupedItems = useMemo(() => {
         if (selectedCategory !== 'All Products' && selectedCategory !== 'All Quick Meals') {
-             // Only group when 'All Quick Meals' is selected (which maps to 'All Products' internally)
             return {};
         }
         return filteredItems.reduce((acc, item) => {

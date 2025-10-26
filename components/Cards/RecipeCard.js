@@ -1,15 +1,14 @@
 // components/Cards/RecipeCard.js
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Star, Timer } from 'lucide-react'
+import { Star, Utensils, ChefHat } from 'lucide-react'
 import Link from '../Link.js' 
 
 // NOTE: Ensure Link is correctly imported/defined in your project.
 
 const RecipeCard = ({ recipe, index, className }) => {
     
-    // 🛠️ FIX 1: Construct the correct image path from the public folder
-    // This is required to access files in /public/images/
+    // Construct the correct image path from the public folder
     const imagePath = `/images/${recipe.image}`
 
     // Determine the difficulty styling
@@ -17,6 +16,14 @@ const RecipeCard = ({ recipe, index, className }) => {
         recipe.difficulty === 'Easy' ? 'bg-emerald-500/90 text-white' : 
         recipe.difficulty === 'Medium' ? 'bg-yellow-500/90 text-gray-900' : 
         'bg-red-600/90 text-white'
+
+    // Get the category icon based on recipe category
+    const getCategoryIcon = () => {
+        const category = recipe.category?.toLowerCase() || ''
+        if (category.includes('breakfast')) return <ChefHat className="w-4 h-4 text-amber-500 mr-1" />
+        if (category.includes('dessert') || category.includes('baking')) return <Utensils className="w-4 h-4 text-amber-500 mr-1" />
+        return <Utensils className="w-4 h-4 text-amber-500 mr-1" />
+    }
 
     return (
         <motion.div
@@ -34,12 +41,11 @@ const RecipeCard = ({ recipe, index, className }) => {
                 {/* Main Card Div: Use h-full and flex flex-col to enable equal height + sticky footer */}
                 <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform group-hover:scale-[1.02] border-4 border-transparent group-hover:border-amber-500 h-full flex flex-col">
                     
-                    {/* 🛠️ FIX 2: Use an <img> tag for the recipe image and correct path */}
+                    {/* Recipe Image */}
                     <div className="relative h-48 w-full flex-shrink-0">
                         <img 
                             src={imagePath} 
                             alt={recipe.title}
-                            // object-cover is essential to ensure the image fills the 12rem (h-48) box without distortion
                             className="h-full w-full object-cover object-center" 
                             loading="lazy" 
                         />
@@ -55,7 +61,7 @@ const RecipeCard = ({ recipe, index, className }) => {
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-amber-500 transition line-clamp-2 flex-shrink-0">
                             {recipe.title}
                         </h3>
-                        {/* Fixed height (h-14) for the excerpt is critical to stabilize card height */}
+                        {/* Fixed height for the excerpt to stabilize card height */}
                         <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-3 mb-3 h-14">
                             {recipe.excerpt}
                         </p>
@@ -67,10 +73,11 @@ const RecipeCard = ({ recipe, index, className }) => {
                                 <Star className="w-4 h-4 text-yellow-400 mr-1 fill-yellow-400" />
                                 <span>{recipe.rating.toFixed(1)}</span>
                             </div>
-                            {/* Prep Time */}
+                            
+                            {/* Category/Type - Replaces Prep Time */}
                             <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <Timer className="w-4 h-4 text-amber-500 mr-1" />
-                                <span>{recipe.prepTime}</span>
+                                {getCategoryIcon()}
+                                <span className="capitalize">{recipe.category || 'Recipe'}</span>
                             </div>
                         </div>
                     </div>

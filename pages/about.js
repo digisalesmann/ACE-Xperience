@@ -15,11 +15,6 @@ import {
     Handshake, 
 } from 'lucide-react'
 
-
-// =================================================================
-// --- Data Definitions (Unchanged) ---
-// =================================================================
-
 const brandPillars = [
     { icon: Sparkles, title: 'Flavor as Art', text: 'We prioritize deep, complex flavor profiles, turning simple meals into gourmet experiences.' },
     { icon: Users, title: 'Community & Sharing', text: 'Food connects us. We champion shared meals and encourage home chefs to share their unique kitchen stories.' },
@@ -28,7 +23,6 @@ const brandPillars = [
 ];
 
 const mediaWallItems = [
-    // --- VIDEOS (3) ---
     { type: 'video', src: 'videos/food.mp4', alt: 'Close-up of chef dicing.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'video', src: 'videos/kitchen.mp4', alt: 'Bread rising time-lapse.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'video', src: 'videos/fufu.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
@@ -56,7 +50,7 @@ const mediaWallItems = [
     { type: 'video', src: 'videos/vo13.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'video', src: 'videos/vo14.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-96' },
     { type: 'video', src: 'videos/vo15.mp4', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
-    // --- IMAGES (10) ---
+
     { type: 'image', src: 'https://i.pinimg.com/1200x/21/72/f0/2172f0a44176e49820617bebfd4f9f00.jpg', alt: 'Perfectly proofed artisan bread dough.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'image', src: 'https://i.pinimg.com/1200x/60/2d/7f/602d7f10c52ac1ed9dd7563a526fe719.jpg', alt: 'Colorful array of kitchen spices in jars.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
     { type: 'image', src: 'https://i.pinimg.com/736x/23/66/72/23667274f808e96201af6c92a610a055.jpg', alt: 'Two pairs of hands preparing dough together.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
@@ -92,31 +86,21 @@ const mediaWallItems = [
     { type: 'image', src: '/images/po24.jpg', alt: 'Cook with Wendy.', span: 'lg:col-span-1 lg:row-span-1', ratio: 'h-64' },
 ].sort(() => Math.random() - 0.5); 
 
-// --- MEDIA WALL COMPONENT (Updated to use <video> for local files) ---
 const MediaItem = ({ item }) => (
     <div className={`group relative w-full ${item.ratio} ${item.span} rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:shadow-4xl transform hover:scale-[1.03]`}>
         {item.type === 'video' ? (
-            // **REVISION START: Using <video> tag for proper full-cover behavior**
             <div className="w-full h-full bg-gray-900 flex items-center justify-center">
                 <video
                     src={item.src}
                     title={item.alt}
-                    // These classes ensure the video fills the container, maintaining aspect ratio.
                     className="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-100 opacity-90"
                     autoPlay
-                    loop // Videos on a media wall often loop
-                    muted // autoplay requires muted
+                    loop
+                    muted
                     playsInline
-                    controls // Added controls so users can pause/play if needed
+                    controls
                 />
-                
-                {/* The play button overlay is now redundant with the native controls, 
-                    but we'll keep it hidden via the `controls` attribute above. 
-                    If you prefer a custom play button, remove `controls` from <video> 
-                    and keep the PlayCircle below. */}
-                {/* <PlayCircle className="absolute w-16 h-16 text-white/80 transition-opacity duration-500 group-hover:opacity-0" /> */}
             </div>
-            // **REVISION END**
         ) : (
             <img 
                 src={item.src} 
@@ -128,15 +112,7 @@ const MediaItem = ({ item }) => (
     </div>
 );
 
-
-// ===============================
-// --- Main About Page Component ---
-// ===============================
-
 const AboutPage = () => {
-    // REMOVED: useState(isClient) and useEffect for Hydration Fix
-    
-    // Text for the Typewriter Effect (Now used for a smooth reveal)
     const typewriterText = "Ace Xperience was born from my kitchen, archiving soulful family recipes and turning them into accessible lessons. This is my invitation to share the journey of transforming simple ingredients into memorable moments.";
     
     return (
@@ -158,19 +134,16 @@ const AboutPage = () => {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-28 sm:space-y-40">
 
-                {/* 1. PERSONAL HERO INTRODUCTION (Staggered Reveal) */}
                 <header className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-                    
-                    {/* Founder Picture (2/5 width) */}
+
                     <div className="lg:col-span-2 w-full h-96 sm:h-[500px] rounded-2xl overflow-hidden shadow-4xl border-4 border-red-600/50 animate-stagger-reveal" style={{ animationDelay: '0.1s' }}>
                         <img 
-                            src="/images/cool.jpg" 
+                            src="/images/wendyy.jpg" 
                             alt="The Founder and Chef of Ace Xperience, Wendy C." 
                             className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                         />
                     </div>
 
-                    {/* Animated Intro Text (3/5 width) */}
                     <div className="lg:col-span-3 space-y-6">
                         <p className="text-xl font-semibold uppercase text-red-600 dark:text-red-400 tracking-[0.3em] mb-2 animate-stagger-reveal" style={{ animationDelay: '00.3s' }}>
                             
@@ -183,12 +156,10 @@ const AboutPage = () => {
                             Hi, I'm Wendy. <br className='hidden sm:inline'/> Let's Cook Together.
                         </h1>
                         
-                        {/* Typewriter content uses the smooth fade-in reveal */}
                         <p 
                             className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed pt-4 animate-stagger-reveal"
                             style={{ animationDelay: '0.7s' }}
                         >
-                            {/* Content is rendered directly, ensuring hydration match */}
                             {typewriterText}
                         </p>
 
@@ -198,10 +169,8 @@ const AboutPage = () => {
                     </div>
                 </header>
                 
-                {/* 2. OUR STORY & THE ACE PROMISE (Split Section) */}
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
                     
-                    {/* Storytelling Column (2/3 width) */}
                     <div className="lg:col-span-2 space-y-10">
                         
                         <div className="space-y-6">
@@ -225,8 +194,7 @@ const AboutPage = () => {
                             </p>
                         </div>
                     </div>
-                    
-                    {/* Founder/Image Column (1/3 width) - Secondary Image */}
+
                     <div className="lg:col-span-1 hidden lg:block">
                         <div className="h-96 rounded-3xl overflow-hidden shadow-2xl transition-transform duration-500 hover:scale-[1.02] border-4 border-amber-500/50">
                             <img src="https://i.pinimg.com/736x/33/c6/2a/33c62abc89266c6ffeccce879bf1e128.jpg" alt="Founder working in a professional kitchen." className="w-full h-full object-cover" />
@@ -234,7 +202,6 @@ const AboutPage = () => {
                     </div>
                 </section>
 
-                {/* 3. CORE PHILOSOPHY PILLARS */}
                 <section className="text-center">
                     <h2 className="text-4xl font-extrabold font-serif text-gray-900 dark:text-white mb-16">
                         Our Values: The Foundation of Good Food
@@ -263,7 +230,6 @@ const AboutPage = () => {
                     </div>
                 </section>
 
-                {/* 4. MEDIA WALL (10 Images + 3 Videos) */}
                 <section className="space-y-12">
                     <div className="max-w-4xl mx-auto text-center">
                         <h2 className="text-4xl font-extrabold font-serif text-gray-900 dark:text-white mb-6">
@@ -273,8 +239,7 @@ const AboutPage = () => {
                             Where passion meets the plate: explore the colors, textures, and precise moments that define the Ace Xperience.
                         </p>
                     </div>
-                    
-                    {/* Elegant, Staggered Grid for 13 items (Fully Responsive) */}
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {mediaWallItems.map((item, index) => (
                             <MediaItem item={item} key={index} />
@@ -282,8 +247,6 @@ const AboutPage = () => {
                     </div>
                 </section>
 
-
-                {/* 5. JOIN THE JOURNEY / FINAL CTA (Responsive Fix) */}
                 <section className="bg-amber-600 dark:bg-amber-900 p-8 sm:p-14 rounded-3xl shadow-4xl text-center">
                   <h2 className="text-2xl sm:text-4xl font-extrabold font-serif text-white mb-3 sm:mb-4">
                     Ready to Start Whisking Up Joy?

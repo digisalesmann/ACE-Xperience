@@ -1,27 +1,16 @@
-// RecipesPage.jsx (or pages/recipes/index.js)
 'use client'
 import React, { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-// Using lucide-react icons. NOTE: Menu is used for category, Filter is general filter.
 import { Search, XCircle, Filter, Menu, ChevronDown, Clock, BarChart2 } from 'lucide-react' 
 
-// --- Component Imports ---
 import Link from '../../components/Link.js'
 import RecipeCard from '../../components/Cards/RecipeCard.js' 
-// --- Data Imports ---
-// NOTE: Assuming your data is correctly exported from this path
 import { allRecipes, categories, difficulties, ICON_MAP } from '../../data/recipesData'
 
-// Utility function to get the correct icon component from the map
 const getIcon = (iconKey) => ICON_MAP[iconKey] || Menu;
 
-// -----------------------------------------------------------
-// Collapsible Filter Group Component - (Refined Spacing)
-// -----------------------------------------------------------
 const CollapsibleFilterGroup = ({ title, children, defaultOpen = true }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
-    
-    // Determine the header icon based on title content for aesthetics
     const Icon = title.includes('Category') ? Menu : Filter;
 
     return (
@@ -55,11 +44,7 @@ const CollapsibleFilterGroup = ({ title, children, defaultOpen = true }) => {
     );
 };
 
-/**
- * FilterButton 
- */
 const FilterButton = ({ item, active, onClick, colorClass }) => {
-    // Get icon using the item's icon name from the data file
     const Icon = item.icon 
     
     const activeClasses = 
@@ -71,7 +56,6 @@ const FilterButton = ({ item, active, onClick, colorClass }) => {
 
     return (
         <button
-            // Pass the item's filter key (string or null)
             onClick={() => onClick(item.filter)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 w-full text-left border 
                 ${active ? activeClasses : inactiveClasses}`}
@@ -83,9 +67,6 @@ const FilterButton = ({ item, active, onClick, colorClass }) => {
     )
 }
 
-// -----------------------------------------------------------
-// Mobile Filter Drawer Component
-// -----------------------------------------------------------
 const MobileFilterDrawer = ({ 
     isOpen, 
     onClose, 
@@ -105,10 +86,8 @@ const MobileFilterDrawer = ({
             </h3>
             <div className="flex flex-wrap gap-3">
                 {items
-                    // Exclude the 'All' option from the mobile list since it's implied by unselected
                     .filter(item => item.filter !== null) 
                     .map(item => {
-                        // Get individual item icon from the data.js map
                         const Icon = item.icon 
                         
                         return (
@@ -154,7 +133,7 @@ const MobileFilterDrawer = ({
                         selected={selectedCategory} 
                         setSelected={setSelectedCategory} 
                         colorClass="amber"
-                        HeaderIcon={Menu} // Using a standard icon for the header
+                        HeaderIcon={Menu}
                     />
                     
                     <FilterSection 
@@ -163,7 +142,7 @@ const MobileFilterDrawer = ({
                         selected={selectedDifficulty} 
                         setSelected={setSelectedDifficulty} 
                         colorClass="emerald"
-                        HeaderIcon={BarChart2} // Using a standard icon for the header
+                        HeaderIcon={BarChart2}
                     />
 
                     <div className="sticky bottom-0 bg-amber-50 dark:bg-gray-950 py-4 border-t border-amber-200 dark:border-gray-800 flex justify-between gap-4 mt-8">
@@ -185,26 +164,20 @@ const MobileFilterDrawer = ({
         </AnimatePresence>
     );
 };
-// -----------------------------------------------------------
 
-// ====================================================================
-// Page Component (RecipesPage) - FULLY UPDATED CODE
-// ====================================================================
 const RecipesPage = () => {
-    // Initial filter state defaults to null, which maps to "All"
     const [selectedCategory, setSelectedCategory] = useState(null)
     const [selectedDifficulty, setSelectedDifficulty] = useState(null)
     const [searchTerm, setSearchTerm] = useState('')
     const [isDrawerOpen, setIsDrawerOpen] = useState(false) 
 
-    // --- Filtering Logic (Retained) ---
     const filteredRecipes = useMemo(() => {
         let recipes = allRecipes
         const s = searchTerm.toLowerCase()
         recipes = recipes.filter(r => {
-            // Category check: includes null (All) or specific match
+
             const categoryMatch = !selectedCategory || r.category === selectedCategory
-            // Difficulty check: includes null (All) or specific match
+
             const difficultyMatch = !selectedDifficulty || r.difficulty === selectedDifficulty
             
             const searchMatch = !s || 
@@ -217,19 +190,16 @@ const RecipesPage = () => {
         return recipes
     }, [selectedCategory, selectedDifficulty, searchTerm])
 
-    // --- Filter Handlers (Retained) ---
     const activeFilters = [
         selectedCategory ? { 
             type: 'category', 
             value: selectedCategory, 
-            // Use find to get the correct name from the data array
             label: categories.find(c => c.filter === selectedCategory)?.name, 
             color: 'amber' 
         } : null,
         selectedDifficulty ? { 
             type: 'difficulty', 
             value: selectedDifficulty, 
-            // Use find to get the correct name from the data array
             label: difficulties.find(d => d.filter === selectedDifficulty)?.name, 
             color: 'emerald' 
         } : null,
@@ -239,8 +209,8 @@ const RecipesPage = () => {
     const activeFiltersCount = activeFilters.length
     
     const clearAllFilters = () => {
-        setSelectedCategory(null) // Reset to null (All)
-        setSelectedDifficulty(null) // Reset to null (All)
+        setSelectedCategory(null)
+        setSelectedDifficulty(null)
         setSearchTerm('')
     }
     
@@ -249,37 +219,31 @@ const RecipesPage = () => {
         if (type === 'difficulty') setSelectedDifficulty(null)
         if (type === 'search') setSearchTerm('')
     }
-    
-    // Get the display name for the current category, defaulting to the 'All Recipes' name
+
     const currentCategoryName = categories.find(c => c.filter === selectedCategory)?.name || categories.find(c => c.filter === null)?.name || 'All Recipes'
 
 
     return (
         <div className="min-h-screen bg-amber-50 dark:bg-gray-900 text-gray-900 dark:text-white font-sans [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            
-            {/* 1. Header (Retained) */}
+
             <header className="w-full h-[250px] sm:h-[300px] overflow-hidden bg-gray-950 shadow-2xl relative z-10">
                 <video
                     autoPlay
                     loop
                     muted
-                    playsInline // Crucial for mobile auto-playback
-                    poster="/images/kitchen-poster.jpg" // Fallback image for older browsers/devices
+                    playsInline 
+                    poster="/images/kitchen-poster.jpg"
                     className="absolute inset-0 w-full h-full object-cover opacity-50"
                 >
-                    {/* Replace '/videos/cooking-hero.mp4' with your video path */}
                     <source src="/videos/green.mp4" type="video/mp4" />
-                    {/* Add other video formats (e.g., .webm) for better compatibility */}
                     Your browser does not support the video tag.
                 </video>
 
-                {/* Overlay Gradient (Keep this for text readability) */}
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 to-transparent"></div>
-                
-                {/* Hero Content (relative z-20 to ensure it's above the video) */}
+
                 <div className="relative z-20 max-w-7xl mx-auto h-full flex flex-col justify-center p-6 sm:p-10">
                     <h1 className="text-4xl sm:text-6xl font-extrabold font-serif text-white drop-shadow-2xl tracking-tight">
-                        The Mastered Recipe Library
+                        The Recipe Library
                     </h1>
                     <p className="text-xl text-gray-300 mt-2 font-light italic border-l-4 border-amber-500 pl-4">
                         Discover {allRecipes.length}+ dishes crafted for culinary excellence.
@@ -287,10 +251,8 @@ const RecipesPage = () => {
                 </div>
             </header>
 
-            {/* 2. Main Content Wrapper: Sidebar + Grid */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex gap-10">
-                
-                {/* A. Desktop Filter Sidebar - FINAL CODE */}
+
                 <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-4 h-[calc(100vh-2rem)] overflow-y-auto pr-8 border-r border-amber-200 dark:border-gray-700 
                     [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     <h2 className="text-xl font-bold tracking-wider uppercase text-gray-900 dark:text-white mb-8 flex items-center">
@@ -338,8 +300,6 @@ const RecipesPage = () => {
                         </motion.button>
                     )}
                 </aside>
-
-                {/* B. Results & Mobile Filter Controls */}
                 <section className="flex-grow min-w-0">
                     
                     <div className="sticky top-0 z-20 bg-amber-50 dark:bg-gray-900 pt-1 pb-4 mb-6"> 
@@ -414,7 +374,6 @@ const RecipesPage = () => {
                         </h2>
                     </div>
 
-                    {/* Recipe Grid (Assuming RecipeCard.js implements h-full and flex logic for equal height) */}
                     <AnimatePresence mode="wait">
                         {filteredRecipes.length > 0 ? (
                             <motion.div
@@ -428,14 +387,12 @@ const RecipesPage = () => {
                                             recipe={recipe} 
                                             key={recipe.id} 
                                             index={index} 
-                                            // Pass h-full to the RecipeCard wrapper
                                             className="!w-full h-full"
                                         />
                                     ))}
                                 </AnimatePresence>
                             </motion.div>
                         ) : (
-                            // Empty State (Retained)
                             <motion.div
                                 key="empty"
                                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -460,7 +417,6 @@ const RecipesPage = () => {
                 </section>
             </main>
 
-            {/* 3. Mobile Filter Drawer (Overlay) */}
             <MobileFilterDrawer 
                 isOpen={isDrawerOpen} 
                 onClose={() => setIsDrawerOpen(false)}
@@ -473,7 +429,6 @@ const RecipesPage = () => {
                 clearAllFilters={clearAllFilters}
             />
 
-            {/* 4. Footer CTA (Retained) */}
             <section className="bg-gray-950 dark:bg-gray-800 py-16 text-center mt-12 shadow-2xl relative z-10">
                 <div className="max-w-4xl mx-auto px-4">
                     <h3 className="text-4xl font-extrabold font-serif text-white mb-3">Chef's Featured Picks</h3>

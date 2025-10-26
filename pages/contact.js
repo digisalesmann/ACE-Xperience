@@ -229,7 +229,6 @@ const ContactPage = () => {
                                 {renderInputField('email', 'email', 'Email Address *', formData.email, handleChange, errors.email, Mail)}
                             </div>
 
-                            {/* Subject Dropdown (THEME-BLENDED STYLING APPLIED) */}
                             {renderSelectField('subject', 'Inquiry Type', formData.subject, handleChange, [
                                 'General Inquiry',
                                 'Recipe Support',
@@ -237,10 +236,8 @@ const ContactPage = () => {
                                 'Business/Press',
                             ])}
 
-                            {/* Message */}
                             {renderTextareaField('message', 'Your Message *', formData.message, handleChange, errors.message)}
-                            
-                            {/* Submit Button */}
+
                             <button
                                 type="submit"
                                 disabled={status === 'submitting'}
@@ -270,10 +267,6 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
-
-// =================================================================
-// --- Reusable Form Field Components (Internalized) ---
-// =================================================================
 
 const baseInputClasses = (error) => `w-full p-3 pl-12 border rounded-xl transition duration-300 shadow-sm dark:bg-gray-700 dark:text-white placeholder:text-gray-400 focus:outline-none text-lg ${
     error ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-amber-500 focus:border-amber-500'
@@ -321,7 +314,6 @@ const renderTextareaField = (name, label, value, onChange, error) => (
     </div>
 );
 
-// STYLING IMPROVEMENT: Custom Select Dropdown (Theme-Blended)
 const renderSelectField = (name, label, value, onChange, options) => (
     <div>
         <label htmlFor={name} className={baseLabelClasses}>{label}</label>
@@ -331,7 +323,6 @@ const renderSelectField = (name, label, value, onChange, options) => (
                 name={name}
                 value={value}
                 onChange={onChange}
-                // Custom classes to style the select box and remove default browser styling
                 className={`w-full p-3 pl-4 border rounded-xl appearance-none transition duration-300 shadow-sm dark:bg-gray-700 dark:text-white focus:outline-none text-lg cursor-pointer
                     border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-red-600 focus:border-red-600
                     
@@ -345,7 +336,6 @@ const renderSelectField = (name, label, value, onChange, options) => (
                     <option key={option} value={option}>{option}</option>
                 ))}
             </select>
-            {/* Custom Chevron Icon for the Dropdown */}
             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-600 pointer-events-none" />
         </div>
     </div>
