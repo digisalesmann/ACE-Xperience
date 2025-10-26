@@ -7,16 +7,8 @@ import {
     CheckCircle, ListOrdered, Lightbulb, Soup 
 } from 'lucide-react' 
 
-// IMPORTANT: Assuming this path is correct based on your setup
 import { allRecipes } from '../../lib/data' 
 
-// -------------------------------------------------------------------
-// --- Helper Components ---
-// -------------------------------------------------------------------
-
-/**
- * MetricTag: Cleaner card design for the key metrics bar.
- */
 const MetricTag = ({ Icon, label, value, color }) => (
     <div className="flex flex-col items-start p-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 w-full flex-1 min-w-[120px] transition duration-300 hover:shadow-md">
         <div className="flex items-center mb-1">
@@ -27,19 +19,12 @@ const MetricTag = ({ Icon, label, value, color }) => (
     </div>
 )
 
-/**
- * ItalicTag: Displays a non-metric tag as simple, italic, underlined text 
- * for a clean, typographic look in the hero section.
- */
 const ItalicTag = ({ label }) => (
     <span className="inline-block text-base font-light italic text-gray-300 dark:text-gray-400 mr-4 border-b border-gray-500/50 hover:text-white transition duration-150 cursor-pointer">
         {label}
     </span>
 )
 
-/**
- * FullRecipeContent: Dynamic content with ingredients/instructions.
- */
 const FullRecipeContent = ({ recipe }) => {
     
     if (!recipe.ingredients || !recipe.instructions) {
@@ -55,10 +40,8 @@ const FullRecipeContent = ({ recipe }) => {
     return (
         <div className="grid lg:grid-cols-3 gap-8 sm:gap-12 mt-12"> 
             
-            {/* 1. Instructions Column (Main Content - Takes 2/3 space) */}
             <div className="lg:col-span-2 space-y-12 order-2 lg:order-1">
-                
-                {/* Instructions / Method - Clean, carded steps */}
+
                 <motion.section
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
                     className="p-4 sm:p-0"
@@ -83,7 +66,6 @@ const FullRecipeContent = ({ recipe }) => {
                     </ol>
                 </motion.section>
 
-                {/* Pro Tip/Notes */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
                     className="p-6 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 rounded-xl shadow-lg"
@@ -100,7 +82,6 @@ const FullRecipeContent = ({ recipe }) => {
                 </motion.div>
             </div>
 
-            {/* 2. Ingredients Column (Sidebar - Takes 1/3 space) */}
             <div className="lg:col-span-1 order-1 lg:order-2">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
@@ -129,10 +110,6 @@ const FullRecipeContent = ({ recipe }) => {
     );
 };
 
-
-// -------------------------------------------------------------------
-// ⭐️ Main Slug Page Component 
-// -------------------------------------------------------------------
 const RecipeSlugPage = () => {
     const router = useRouter(); 
 
@@ -172,8 +149,7 @@ const RecipeSlugPage = () => {
 
     return (
         <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white font-sans">
-            
-            {/* 1. IMMERSIVE HERO SECTION */}
+
             <div className="relative w-full h-[450px] sm:h-[600px] overflow-hidden">
                 <motion.img 
                     src={`/images/${recipe.image}`} 
@@ -184,8 +160,7 @@ const RecipeSlugPage = () => {
                     transition={{ duration: 0.5 }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-950/40 to-transparent"></div>
-                
-                {/* Hero Content */}
+
                 <div className="absolute bottom-16 sm:bottom-20 left-0 right-0 p-6 sm:p-12 max-w-7xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
@@ -197,8 +172,7 @@ const RecipeSlugPage = () => {
                             {recipe.title}
                         </h1>
                         <p className="text-xl text-gray-300 mt-4 max-w-3xl italic font-light hidden sm:block">{recipe.excerpt}</p>
-                        
-                        {/* Rating and Tags underneath title */}
+
                         <div className="flex flex-wrap items-center mt-6">
                             <div className="flex items-center space-x-1 mr-6">
                                 {starDisplay}
@@ -213,10 +187,8 @@ const RecipeSlugPage = () => {
                 </div>
             </div>
 
-            {/* 2. MAIN CONTENT AREA */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20 pb-20">
                 
-                {/* Metrics Bar (Compact, Card Style) - NO TIMERS */}
                 <motion.div 
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -229,7 +201,6 @@ const RecipeSlugPage = () => {
                     <MetricTag Icon={ChefHat} label="Skill Level" value={recipe.difficulty} color="text-amber-600" />
                 </motion.div>
 
-                {/* Detailed Recipe Content */}
                 <FullRecipeContent recipe={recipe} />
 
             </main>

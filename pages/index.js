@@ -163,8 +163,8 @@ const HomePage = () => {
                         id="hero-heading"
                         className="text-5xl sm:text-7xl md:text-8xl font-extrabold tracking-tight mb-5 sm:mb-6 drop-shadow-2xl font-serif text-white leading-tight"
                     >
-                        Gather. Create.
-                        <span className="bg-gradient-to-r from-amber-300 via-orange-300 to-amber-400 text-transparent bg-clip-text block mt-2">
+                        Gather. Create.&nbsp;
+                        <span className="bg-gradient-to-r from-amber-300 via-orange-300 to-amber-400 text-transparent bg-clip-text inline md:block md:mt-2">
                             Savor.
                         </span>
                     </h1>

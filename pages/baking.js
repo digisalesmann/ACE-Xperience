@@ -21,6 +21,8 @@ const MENU_ITEMS = [
   { id: 'savory-sausage-rolls', name: 'Savory Sausage Rolls', price: 5.00, desc: 'Juicy, spiced sausage meat wrapped in golden puff pastry. Excellent appetizer.', size: 'Pack of 4', icon: 'Utensils', image: 'images/saucee.jpg', category: 'Pastries' },
   { id: 'fluffy-donuts', name: 'Fluffy Donuts', price: 3.50, desc: 'Yeast-risen dough, fried to a perfect golden brown, ready for glazing or dusting.', size: 'Single', icon: 'Utensils', image: 'images/donut.jpg', category: 'Pastries' },
   { id: 'fluffy-pancakes', name: 'Fluffy Pancakes', price: 4.50, desc: 'The ultimate recipe for thick, fluffy, American-style breakfast pancakes.', size: 'Stack of 3', icon: 'Utensils', image: 'images/pan.jpg', category: 'Pastries' },
+  { id: 'chin-chin', name: 'Chin Chin', price: 3.50, desc: 'Crispy golden bites with a sweet buttery flavor, a classic West African snack.', size: '100g Pack', icon: 'Utensils', image: 'images/chin.jpg', category: 'Pastries' },
+  { id: 'chocolate-milky-donut', name: 'Chocolate & Milky Donut', price: 4.75, desc: 'Soft, fluffy donut filled with creamy vanilla milk and coated in smooth chocolate glaze for a perfect balance of sweetness.', size: 'Single', icon: 'Utensils', image: 'images/cm.jpg', category: 'Pastries' },
 
   // 🍞 Breads
   { id: 'soft-sliced-bread', name: 'Soft Sliced Bread', price: 10.00, desc: 'Achieve the perfect open crumb and signature tangy flavor with this method.', size: '900g Loaf', icon: 'Package', image: 'images/sour.jpg', category: 'Breads' },
@@ -30,6 +32,8 @@ const MENU_ITEMS = [
   { id: 'moist-banana-bread', name: 'Moist Banana Bread', price: 9.00, desc: 'Simple, moist, and spiced. The best way to use up those ripe bananas!', size: 'Loaf', icon: 'Cake', image: 'images/moist.jpg', category: 'Cakes & Tarts' },
   { id: 'vanilla-cupcakes', name: 'Vanilla Cupcakes', price: 4.00, desc: 'Light, airy vanilla sponge topped with fluffy buttercream. A foolproof basic.', size: 'Pack of 6', icon: 'Cake', image: 'images/cup.jpg', category: 'Cakes & Tarts' },
   { id: 'rich-chocolate-cake', name: 'Rich Chocolate Cake', price: 40.00, desc: 'Intensely dark and fudgy cake with a rich ganache. Perfect for special occasions.', size: '8-inch', icon: 'Cake', image: 'images/cake.jpg', category: 'Cakes & Tarts' },
+  { id: 'vanilla-cream-cake', name: 'Vanilla Cream Cake', price: 52.00, desc: 'Soft vanilla sponge layered with rich whipped cream and frosted with smooth buttercream for a timeless classic.', size: '8-inch', icon: 'Cake', image: 'images/val.jpg', category: 'Cakes & Tarts' },
+
 ];
 
 
