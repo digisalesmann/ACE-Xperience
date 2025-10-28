@@ -120,7 +120,6 @@ const useCartCount = () => {
 // --- NAV LINKS (Updated: Contact removed from main array) ---
 // The desktop nav Contact link is styled separately as a button via its 'isPrimary' flag
 const navLinks = [
-    { title: 'Recipes', path: '/recipes' },
     { title: 'Baking & Sweets', path: '/baking' },
     { title: 'Quick Meals', path: '/meal' },
     { title: 'Tips & Techniques', path: '/tips' },

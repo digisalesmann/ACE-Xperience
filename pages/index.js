@@ -11,28 +11,28 @@ import {
 } from '@heroicons/react/24/solid'
 
 
-// --- Data Definitions ---
 const featuredRecipes = [
-    { slug: 'vanilla-cupcakes', title: 'Vanilla Cupcakes', excerpt: 'Light, airy vanilla sponge topped with fluffy buttercream. A foolproof basic.', image: 'images/cup.jpg', difficulty: 'Easy' },
-    { slug: 'yogurt-parfait', title: 'Yogurt Parfait', excerpt: 'Layers of Greek yogurt, berries, and crunchy granola. Quick and nutritious.', image: 'images/parf.jpg', difficulty: 'Easy' },
-    { slug: 'chocolate-cake', title: 'Rich Chocolate Fudge Cake', excerpt: 'Rich and decadent dessert perfect for any special occasion or craving.', image: 'images/cake.jpg', difficulty: 'Medium' },
-    { slug: 'gizzdodo', title: 'Spicy Gizzdodo', excerpt: 'A fantastic mix of fried gizzard and sweet plantain pieces tossed in pepper sauce.', image: 'images/gizz.jpg', difficulty: 'Medium' },
-]
+  { slug: 'vanilla-cupcakes', title: 'Vanilla Cupcakes', excerpt: 'Light, airy vanilla sponge topped with fluffy buttercream. A foolproof basic.', image: 'images/cup.jpg', difficulty: 'Easy', category: 'baking' },
+  { slug: 'yogurt-parfait', title: 'Yogurt Parfait', excerpt: 'Layers of Greek yogurt, berries, and crunchy granola. Quick and nutritious.', image: 'images/parf.jpg', difficulty: 'Easy', category: 'baking' },
+  { slug: 'chocolate-cake', title: 'Rich Chocolate Fudge Cake', excerpt: 'Rich and decadent dessert perfect for any special occasion or craving.', image: 'images/cake.jpg', difficulty: 'Medium', category: 'baking' },
+  { slug: 'jollof-rice', title: 'Smoky Jollof Rice', excerpt: 'Classic party rice dish cooked in a spicy tomato and pepper base. Served plain.', image: 'images/smoky.jpg', difficulty: 'Medium', category: 'meal' },
+];
+
 
 const inspirationSections = [
-    { title: 'Quick Meals', description: 'Under 30 minutes', image: 'images/food.webp', slug: 'meal' },
-    { title: 'Baking & Sweets', description: 'Seasonal treats and festive desserts', image: 'images/bites.webp', slug: 'baking' },
-    { title: 'Recipes', description: 'A collection of our favorite recipes', image: 'images/new.png', slug: 'vegan-favorites' },
-]
+  { title: 'Quick Meals', description: 'Simple everyday dishes.', image: 'images/food.webp', slug: 'meal' },
+  { title: 'Baking & Sweets', description: 'Delicious treats and festive desserts.', image: 'images/bites.webp', slug: 'baking' },
+  { title: 'Tips & Techniques', description: 'Smart hacks for better cooking.', image: 'images/tipss.png', slug: 'tips' },
+];
 
 const recipeOfTheWeek = {
-    title: 'Creamy Yogurt Parfait Bliss',
-    description: "Indulge in the perfect balance of creamy yogurt, crunchy granola, and fresh seasonal fruits. This easy guide shows you how to layer textures and flavors for a refreshing breakfast or a light, guilt-free dessert. Whether you prefer tangy Greek yogurt or a hint of honey sweetness, discover the art of creating a parfait that looks as good as it tastes.",
-    image: 'images/parf.jpg',
-    slug: 'yogurt-parfait',
-    servings: '2 Parfaits',
-    skillLevel: 'Easy',
-}
+  title: 'Creamy Yogurt Parfait Bliss',
+  description: "Indulge in the perfect balance of creamy yogurt, crunchy granola, and fresh seasonal fruits. This easy guide shows you how to layer textures and flavors for a refreshing breakfast or a light, guilt-free dessert. Whether you prefer tangy Greek yogurt or a hint of honey sweetness, discover the art of creating a parfait that looks as good as it tastes.",
+  image: 'images/parf.jpg',
+  link: '/baking',
+  servings: '2 Parfaits',
+  skillLevel: 'Easy',
+};
 
 // --- Extracted UI Components ---
 
@@ -86,10 +86,10 @@ const RecipeCard = ({ recipe, isNew = false }) => (
                 {recipe.excerpt}
             </p>
             <Link
-                href={`/recipes/${recipe.slug}`}
+                href={`/${recipe.category}`}
                 className="text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 font-semibold text-sm transition-colors duration-200 flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-sm"
-            >
-                View Recipe
+                >
+                {recipe.category === 'baking' ? 'Baking' : 'Meals'}
                 <ChevronRightIcon className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
             </Link>
         </div>
@@ -98,7 +98,7 @@ const RecipeCard = ({ recipe, isNew = false }) => (
 
 const CategoryCard = ({ category }) => (
     <Link 
-        href={`/categories/${category.slug}`} 
+        href={`/${category.slug}`} 
         className="block h-full focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-500 rounded-2xl"
     >
         <div className="relative h-full min-h-[280px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer transition-all duration-500 transform hover:scale-[1.03] hover:shadow-2xl">
@@ -156,30 +156,30 @@ const HomePage = () => {
                 <div className="relative z-10 max-w-5xl text-center px-4">
                     <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
                         <FireIcon className="w-4 h-4 text-amber-400" />
-                        <span className="text-sm font-medium text-white">Fresh Recipes Every Week</span>
+                        <span className="text-sm font-medium text-white">Fresh Techniques Every Week</span>
                     </div>
                     
                     <h1 
                         id="hero-heading"
                         className="text-5xl sm:text-7xl md:text-8xl font-extrabold tracking-tight mb-5 sm:mb-6 drop-shadow-2xl font-serif text-white leading-tight"
                     >
-                        Gather. Create.&nbsp;
+                        Learn. Master.&nbsp;
                         <span className="bg-gradient-to-r from-amber-300 via-orange-300 to-amber-400 text-transparent bg-clip-text inline md:block md:mt-2">
-                            Savor.
+                            Create.
                         </span>
                     </h1>
                     
                     <p className="text-lg sm:text-2xl text-gray-100 mb-10 sm:mb-12 drop-shadow-lg max-w-3xl mx-auto leading-relaxed font-light">
-                        From cozy family dinners to weekend indulgences, discover recipes
-                        made with love, simple ingredients, and a dash of joy.
+                        From foundational skills to advanced techniques, discover the cooking knowledge
+                        that transforms good cooks into great ones.
                     </p>
                     
                     <Link
-                        href="/recipes"
+                        href="/tips"
                         className="inline-flex items-center justify-center px-10 py-4 sm:px-12 sm:py-5 text-lg sm:text-xl font-bold bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl shadow-2xl transition duration-300 hover:from-amber-600 hover:to-orange-600 hover:shadow-3xl transform hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-white"
                     >
                         <SparklesIcon className="w-6 h-6 mr-2" /> 
-                        Explore Recipes
+                        Explore Techniques
                     </Link>
                 </div>
             </section>
@@ -191,7 +191,7 @@ const HomePage = () => {
                         <div className="lg:w-1/2 h-72 sm:h-96 lg:h-auto overflow-hidden relative group">
                             <img
                                 src={`/${recipeOfTheWeek.image}`}
-                                alt="Artisan sourdough loaf, feature recipe of the week"
+                                alt="feature recipe of the week"
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                             <div className="absolute top-4 left-4 bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
@@ -236,16 +236,16 @@ const HomePage = () => {
                             </div>
                             
                             <Link
-                                href={`/recipes/${recipeOfTheWeek.slug}`}
+                                href="/baking"
                                 className="self-start px-8 py-3 sm:px-10 sm:py-4 text-base sm:text-lg font-bold bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl shadow-xl hover:from-amber-600 hover:to-orange-600 transform hover:scale-105 hover:shadow-2xl active:scale-95 transition-all duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-500"
-                            >
-                                Get the Recipe →
-                            </Link>
+                                >
+                                Order Now →
+                                </Link>
                         </div>
                     </div>
                 </section>
 
-                {/* Featured Recipes */}
+                {/* 🌟 Featured Recipes */}
                 <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
                     <SectionHeader
                         subTitle="Weekly Favorites"
@@ -253,7 +253,7 @@ const HomePage = () => {
                     />
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
                         {featuredRecipes.map((r, i) => (
-                            <RecipeCard recipe={r} key={r.slug} isNew={i === 0} />
+                        <RecipeCard recipe={r} key={r.slug} isNew={i === 0} />
                         ))}
                     </div>
                 </section>

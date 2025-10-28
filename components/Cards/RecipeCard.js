@@ -73,12 +73,11 @@ const RecipeCard = ({ recipe, index, className }) => {
                                 <Star className="w-4 h-4 text-yellow-400 mr-1 fill-yellow-400" />
                                 <span>{recipe.rating.toFixed(1)}</span>
                             </div>
-                            
-                            {/* Category/Type - Replaces Prep Time */}
-                            <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                                {getCategoryIcon()}
-                                <span className="capitalize">{recipe.category || 'Recipe'}</span>
-                            </div>
+
+                            {/* CTA Button */}
+                            <span className="inline-flex items-center text-sm font-semibold text-amber-600 dark:text-amber-400 hover:text-amber-700 transition-colors">
+                                Order Now →
+                            </span>
                         </div>
                     </div>
                 </div>

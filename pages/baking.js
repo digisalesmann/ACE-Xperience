@@ -12,20 +12,21 @@ const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__f
 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
 const LIGHT_BG_COLOR = '#FBF5E5';
-const HERO_IMAGE_URL = 'images/hero.png'; 
+const HERO_VIDEO_URL = 'videos/pree.mp4'; 
 
 const MENU_ITEMS = [
   // 🥧 Pastries
-  { id: 'classic-meat-pie', name: 'Classic Meat Pie', price: 6.00, desc: 'Flaky crust enclosing perfectly seasoned savory beef filling. A comforting classic.', size: 'Single', icon: 'Utensils', image: 'images/meatt.jpg', category: 'Pastries' },
-  { id: 'creamy-chicken-pie', name: 'Creamy Chicken Pie', price: 6.50, desc: 'Tender chicken in a rich, velvety cream sauce, baked under a golden puff pastry.', size: 'Single', icon: 'Utensils', image: 'images/chick.jpg', category: 'Pastries' },
-  { id: 'savory-sausage-rolls', name: 'Savory Sausage Rolls', price: 5.00, desc: 'Juicy, spiced sausage meat wrapped in golden puff pastry. Excellent appetizer.', size: 'Pack of 4', icon: 'Utensils', image: 'images/saucee.jpg', category: 'Pastries' },
-  { id: 'fluffy-donuts', name: 'Fluffy Donuts', price: 3.50, desc: 'Yeast-risen dough, fried to a perfect golden brown, ready for glazing or dusting.', size: 'Single', icon: 'Utensils', image: 'images/donut.jpg', category: 'Pastries' },
+  { id: 'classic-meat-pie', name: 'Classic Meat Pie', price: 3.00, desc: 'Flaky crust enclosing perfectly seasoned savory beef filling. A comforting classic.', size: '10 pieces Minimum', icon: 'Utensils', image: 'images/meatpie.jpg', category: 'Pastries' },
+  { id: 'creamy-chicken-pie', name: 'Creamy Chicken Pie', price: 2.75, desc: 'Tender chicken in a rich, velvety cream sauce, baked under a golden puff pastry.', size: '10 pieces Minimum', icon: 'Utensils', image: 'images/meat.jpg', category: 'Pastries' },
+  { id: 'savory-sausage-rolls', name: 'Savory Sausage Rolls', price: 1.00, desc: 'Juicy, spiced sausage meat wrapped in golden puff pastry. Excellent appetizer.', size: '7 pieces Minimum', icon: 'Utensils', image: 'images/sa.jpg', category: 'Pastries' },
+  { id: 'fluffy-donuts', name: 'Fluffy Donuts', price: 1.00, desc: 'Yeast-risen dough, fried to a perfect golden brown, ready for glazing or dusting.', size: 'Single', icon: 'Utensils', image: 'images/donut.jpg', category: 'Pastries' },
   { id: 'fluffy-pancakes', name: 'Fluffy Pancakes', price: 4.50, desc: 'The ultimate recipe for thick, fluffy, American-style breakfast pancakes.', size: 'Stack of 3', icon: 'Utensils', image: 'images/pan.jpg', category: 'Pastries' },
-  { id: 'chin-chin', name: 'Chin Chin', price: 3.50, desc: 'Crispy golden bites with a sweet buttery flavor, a classic West African snack.', size: '100g Pack', icon: 'Utensils', image: 'images/chin.jpg', category: 'Pastries' },
-  { id: 'chocolate-milky-donut', name: 'Chocolate & Milky Donut', price: 4.75, desc: 'Soft, fluffy donut filled with creamy vanilla milk and coated in smooth chocolate glaze for a perfect balance of sweetness.', size: 'Single', icon: 'Utensils', image: 'images/cm.jpg', category: 'Pastries' },
+  { id: 'chin-chin', name: 'Chin Chin', price: 5.00, desc: 'Crispy golden bites with a sweet buttery flavor, a classic West African snack.', size: '500g Pack', icon: 'Utensils', image: 'images/chin.jpg', category: 'Pastries' },
+  { id: 'chocolate-milky-donut', name: 'Chocolate & Milky Donut', price: 1.50, desc: 'Soft, fluffy donut filled with creamy vanilla milk and coated in smooth chocolate glaze for a perfect balance of sweetness.', size: '10 pieces Minimum', icon: 'Utensils', image: 'images/cm.jpg', category: 'Pastries' },
+  { id: 'puff-puff', name: 'Puff Puff', price: 10.00, desc: 'Soft, golden, deep-fried dough balls lightly sweetened. A beloved West African street snack.', size: '8 pieces', icon: 'Utensils', image: 'images/puff.jpg', category: 'Pastries' },
 
   // 🍞 Breads
-  { id: 'soft-sliced-bread', name: 'Soft Sliced Bread', price: 10.00, desc: 'Achieve the perfect open crumb and signature tangy flavor with this method.', size: '900g Loaf', icon: 'Package', image: 'images/sour.jpg', category: 'Breads' },
+  { id: 'soft-sliced-bread', name: 'Soft Sliced Bread', price: 3.00, desc: 'Achieve the perfect open crumb and signature tangy flavor with this method.', size: '900g Loaf', icon: 'Package', image: 'images/sour.jpg', category: 'Breads' },
   { id: 'parmesan-rolls', name: 'Parmesan Rolls', price: 6.00, desc: 'Soft, warm rolls drenched in garlic butter and Parmesan cheese. Highly addictive.', size: 'Pack of 6', icon: 'Package', image: 'images/parm.jpg', category: 'Breads' },
 
   // 🍰 Cakes & Tarts
@@ -34,6 +35,8 @@ const MENU_ITEMS = [
   { id: 'rich-chocolate-cake', name: 'Rich Chocolate Cake', price: 40.00, desc: 'Intensely dark and fudgy cake with a rich ganache. Perfect for special occasions.', size: '8-inch', icon: 'Cake', image: 'images/cake.jpg', category: 'Cakes & Tarts' },
   { id: 'vanilla-cream-cake', name: 'Vanilla Cream Cake', price: 52.00, desc: 'Soft vanilla sponge layered with rich whipped cream and frosted with smooth buttercream for a timeless classic.', size: '8-inch', icon: 'Cake', image: 'images/val.jpg', category: 'Cakes & Tarts' },
 
+  // 🍓 Healthy Treats
+  { id: 'yoghurt-parfait', name: 'Yoghurt Parfait', price: 7.50, desc: 'Layers of creamy yoghurt, fresh fruits, and crunchy granola create a refreshing, guilt-free treat perfect for any time of the day.', size: 'Cup', icon: 'IceCream', image: 'images/parf.jpg', category: 'Healthy Treats' },
 ];
 
 
@@ -479,13 +482,17 @@ const App = () => {
 
             <header 
                 className="relative pt-20 pb-16 md:pt-28 md:pb-24 shadow-lg overflow-hidden z-20"
-                style={{ 
-                    backgroundImage: `url(${HERO_IMAGE_URL})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }}
             >
-                <div className="absolute inset-0 bg-slate-800/20"></div>
+                <video 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                >
+                    <source src={HERO_VIDEO_URL} type="video/mp4" />
+                </video>
+                <div className="absolute inset-0 bg-slate-800/40"></div>
 
                 <div className="relative z-20 max-w-7xl mx-auto h-full flex flex-col justify-center p-6 sm:p-10">
                     <h1 className="text-4xl sm:text-6xl font-extrabold font-serif text-white drop-shadow-2xl tracking-tight">
