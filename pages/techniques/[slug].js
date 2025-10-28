@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router' // <-- Import for Pages Router access
 import { 
     ChevronLeft, Flame, Beaker, Utensils, Sparkles, AlertTriangle, 
-    CookingPot, BookOpen, Clock, Layers, ChevronRight
+    CookingPot, Layers, ChevronRight, Award
 } from 'lucide-react'
 
 // =================================================================
@@ -78,7 +78,7 @@ const baseSkillsRoadmap = [
         icon: Utensils,
         content: "Mastering the knife is the most crucial step. Focus on the 'claw' grip for safety and the rock-chopping motion for efficiency. Mise en Place (everything in its place) ensures a smooth cooking process, reducing stress and time-sensitive errors.",
         prerequisite: 'None',
-        estimated_time: '2 hours',
+        difficulty_level: 'Beginner',
         details: [
             { name: 'The Claw Grip & Safety', description: 'Protecting your fingertips by keeping them curled under while guiding the blade.' },
             { name: 'Classic Cuts', description: 'Mastering the Brunoise (3mm dice) and Julienne (2mm sticks) for uniform cooking.' },
@@ -93,7 +93,7 @@ const baseSkillsRoadmap = [
         icon: Flame,
         content: "Understanding how heat transfers is key to developing texture and flavor. High heat (searing) develops the Maillard reaction (browning), while controlled oven heat (roasting) cooks protein evenly without drying.",
         prerequisite: 'Step 1: Foundational Prep',
-        estimated_time: '3 hours',
+        difficulty_level: 'Intermediate',
         details: [
             { name: 'Maillard vs. Caramelization', description: 'Understanding the difference between protein browning and sugar browning.' },
             { name: 'Smoke Points of Fats', description: 'Selecting the right oil (e.g., grapeseed, butter) for the temperature of the pan.' },
@@ -108,7 +108,7 @@ const baseSkillsRoadmap = [
         icon: Sparkles,
         content: "Sauces provide moisture, flavor, and elegance. Emulsification (binding fat and liquid, like in a vinaigrette or hollandaise) and Reduction (concentrating flavor by evaporating water) are core skills.",
         prerequisite: 'Step 2: Heat Control',
-        estimated_time: '4 hours',
+        difficulty_level: 'Intermediate',
         details: [
             { name: 'Building a Roux', description: 'Creating the fat-flour base for thickening classic sauces (béchamel, velouté).' },
             { name: 'Achieving Stable Emulsions', description: 'Using egg yolks or mustard as stabilizers to prevent separation.' },
@@ -123,7 +123,7 @@ const baseSkillsRoadmap = [
         icon: Beaker,
         content: "Baking is precise chemistry. Gluten management (developing the protein network) gives dough structure, and controlling yeast activity determines the final rise, flavor, and crumb texture.",
         prerequisite: 'All steps recommended',
-        estimated_time: '6 hours',
+        difficulty_level: 'Advanced',
         details: [
             { name: 'The Autolyse Technique', description: 'Resting flour and water before kneading to aid hydration and smooth gluten development.' },
             { name: 'Kneading for Windowpane', description: 'Testing gluten elasticity by stretching the dough thin enough to see light through it.' },
@@ -171,6 +171,7 @@ const getStepsByCategoryId = (categorySlug) => {
  * Renders the detailed content for a single Roadmap step (e.g., Step 1: Foundational Prep).
  */
 const TechniqueStepPage = ({ stepData }) => {
+    const router = useRouter()
     const StepIcon = stepData.icon
 
     return (
@@ -198,11 +199,11 @@ const TechniqueStepPage = ({ stepData }) => {
                     <div className="border-t border-gray-100 dark:border-gray-700 pt-6 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 flex items-center">
                             <CookingPot className='w-5 h-5 mr-2 text-amber-600 dark:text-amber-400' />
-                            Prerequisite: <span className='font-semibold'>{stepData.prerequisite}</span>
+                            Prerequisite: <span className='font-semibold ml-1'>{stepData.prerequisite}</span>
                         </p>
                         <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 flex items-center">
-                            <Clock className='w-5 h-5 mr-2 text-amber-600 dark:text-amber-400' />
-                            Time Estimate: <span className='font-semibold'>{stepData.estimated_time}</span>
+                            <Award className='w-5 h-5 mr-2 text-amber-600 dark:text-amber-400' />
+                            Difficulty Level: <span className='font-semibold ml-1'>{stepData.difficulty_level}</span>
                         </p>
                     </div>
                 </header>
@@ -235,13 +236,13 @@ const TechniqueStepPage = ({ stepData }) => {
                     </ul>
 
                     <div className="mt-10 pt-6 border-t border-gray-100 dark:border-gray-700 text-center">
-                        <Link
-                            href={`/techniques/${stepData.slug}/full-guide`}
+                        <button
+                            onClick={() => router.back()}
                             className="inline-flex items-center px-8 py-3 text-lg font-bold bg-amber-500 text-gray-900 rounded-xl shadow-lg transition duration-300 hover:bg-amber-600 transform active:scale-[0.98] ring-4 ring-amber-300/50"
                         >
-                            <BookOpen className='w-5 h-5 mr-3'/> 
-                            Start Full Lesson <ChevronRight className="w-5 h-5 ml-2" />
-                        </Link>
+                            <ChevronLeft className='w-5 h-5 mr-2'/> 
+                            Go Back
+                        </button>
                     </div>
                 </section>
             </div>
